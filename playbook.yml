@@ -1,0 +1,67 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+  vars:
+    homebrew_taps:
+      - caskroom/cask
+    homebrew_packages:
+      - { name: ansible }
+      - { name: brew-cask }
+      - { name: git }
+      - { name: tig }
+      - { name: python }
+      - { name: wget }
+      - { name: zsh }
+      - { name: openssl, state: linked, install_options: force }
+      - { name: curl }
+      - { name: jq }
+      - { name: heroku-toolbelt }
+      - { name: flow }
+      - { name: watchman }
+    homebrew_cask_packages:
+      # browsers
+      - { name: google-chrome }
+      - { name: google-japanese-ime }
+      - { name: firefox }
+      # editor
+      - { name: skitch }
+      - { name: atom }
+      - { name: visual-studio-code }
+      # communication tools
+      - { name: slack }
+      - { name: skype }
+      # utils
+      - { name: iterm2 }
+      - { name: karabiner }
+      - { name: seil }
+      - { name: the-unarchiver }
+      # etc
+      - { name: virtualbox }
+  tasks:
+    # brew tap
+    - name: brew tap
+      homebrew_tap: tap={{ item }} state=present
+      with_items: '{{ homebrew_taps }}'
+    # brew update
+    - name: brew update
+      homebrew: update_homebrew=yes
+    # brew install
+    - name: install brew package
+      homebrew: >
+        name={{ item.name }}
+        state={{ item.state | default('latest') }}
+        install_options={{
+          item.install_options | default() | join(',')
+          if item.install_options is not string
+          else item.install_options
+        }}
+      with_items: '{{ homebrew_packages }}'
+      register: brew_result
+    # brew cask install
+    - name: install homebrew-cask
+      homebrew: name=brew-cask state=latest
+    - name: install cask package
+      homebrew_cask: name={{ item.name }} state={{ item.state | default('installed') }}
+      with_items: '{{ homebrew_cask_packages }}'
+      register: cask_result
