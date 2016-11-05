@@ -5,19 +5,22 @@
   vars:
     homebrew_taps:
       - caskroom/cask
+      - homebrew/bundle
     homebrew_packages:
       - { name: ansible }
       - { name: brew-cask }
+      - { name: curl }
       - { name: git }
+      - { name: heroku }
+      - { name: hub }
+      - { name: jq }
       - { name: tig }
+      - { name: tree }
       - { name: python }
       - { name: wget }
       - { name: zsh }
       - { name: openssl, state: linked, install_options: force }
-      - { name: curl }
-      - { name: jq }
-      - { name: heroku-toolbelt }
-      - { name: flow }
+      - { name: mas }
       - { name: watchman }
     homebrew_cask_packages:
       # browsers
@@ -26,17 +29,19 @@
       - { name: firefox }
       # editor
       - { name: skitch }
-      - { name: atom }
       - { name: visual-studio-code }
       # communication tools
       - { name: slack }
       - { name: skype }
       # utils
       - { name: iterm2 }
-      - { name: karabiner }
-      - { name: seil }
+      - { name: karabiner-elements }
       - { name: the-unarchiver }
       # etc
+      - { name: clipy }
+      - { name: java }
+      - { name: dropbox }
+      - { name: vagrant }
       - { name: virtualbox }
   tasks:
     # brew tap
@@ -65,3 +70,11 @@
       homebrew_cask: name={{ item.name }} state={{ item.state | default('installed') }}
       with_items: '{{ homebrew_cask_packages }}'
       register: cask_result
+    # install oh-my-zsh
+    - name: install oh-my-zsh
+      shell: 'sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)'
+      args:
+        creates: ~/.oh-my-zsh
+    # install anyenv
+    - name: install anyenv
+      shell: 'git clone https://github.com/riywo/anyenv ~/.anyenv'
