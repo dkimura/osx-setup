@@ -1,0 +1,41 @@
+---
+homebrew_taps:
+  - caskroom/cask
+  - homebrew/bundle
+homebrew_packages:
+  - { name: ansible }
+  - { name: brew-cask }
+  - { name: curl }
+  - { name: git }
+  - { name: heroku }
+  - { name: hub }
+  - { name: jq }
+  - { name: tig }
+  - { name: tree }
+  - { name: python }
+  - { name: wget }
+  - { name: zsh }
+  - { name: openssl, state: linked, install_options: force }
+  - { name: mas }
+  - { name: watchman }
+homebrew_cask_packages:
+  # browsers
+  - { name: google-chrome }
+  - { name: google-japanese-ime }
+  - { name: firefox }
+  # editor
+  - { name: skitch }
+  - { name: visual-studio-code }
+  # communication tools
+  - { name: slack }
+  - { name: skype }
+  # utils
+  - { name: iterm2 }
+  - { name: karabiner-elements }
+  - { name: the-unarchiver }
+  # etc
+  - { name: clipy }
+  - { name: java }
+  - { name: dropbox }
+  - { name: vagrant }
+  - { name: virtualbox }

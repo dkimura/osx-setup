@@ -1,0 +1,9 @@
+---
+- name: Setup my Mackbook
+  hosts: localhost
+  connection: local
+  roles:
+    - homebrew
+    - git
+    - zsh
+    - lang

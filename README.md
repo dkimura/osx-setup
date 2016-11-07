@@ -1,5 +1,31 @@
 # OSX Setup
 
-## Usage
+- Software Update
 
-HOMEBREW_CASK_OPTS="--appdir=/Applications" ansible-playbook -i hosts -v playbook.yml
+```
+$ sudo softwareupdate --install --recommended
+```
+
+- Install Xcode
+
+```
+$ xcode-select --install
+```
+
+- Install Homebrew
+
+```
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+- Clone this repository
+
+```
+$ git clone git@github.com:dkimura/osx-setup.git
+```
+
+- Run Ainsible
+
+```
+$ HOMEBREW_CASK_OPTS="--appdir=/Applications" ansible-playbook site.yml -vvvv
+```
