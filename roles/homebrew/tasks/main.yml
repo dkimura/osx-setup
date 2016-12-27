@@ -19,8 +19,6 @@
   with_items: '{{ homebrew_packages }}'
   register: brew_result
 # brew cask install
-- name: install homebrew-cask
-  homebrew: name=brew-cask state=latest
 - name: install cask package
   homebrew_cask: name={{ item.name }} state={{ item.state | default('installed') }}
   with_items: '{{ homebrew_cask_packages }}'

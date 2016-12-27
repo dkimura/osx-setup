@@ -3,8 +3,6 @@ homebrew_taps:
   - caskroom/cask
   - homebrew/bundle
 homebrew_packages:
-  - { name: ansible }
-  - { name: brew-cask }
   - { name: curl }
   - { name: git }
   - { name: heroku }
@@ -31,7 +29,6 @@ homebrew_cask_packages:
   - { name: skype }
   # utils
   - { name: iterm2 }
-  - { name: karabiner-elements }
   - { name: the-unarchiver }
   # etc
   - { name: clipy }
@@ -39,3 +36,5 @@ homebrew_cask_packages:
   - { name: dropbox }
   - { name: vagrant }
   - { name: virtualbox }
+  - { name: 1password }
+  - { name: bettertouchtool }
