@@ -6,7 +6,7 @@
     echo 'eval "$(anyenv init -)"' >> ~/.zshrc
     exec $SHELL -l
 - name: install ndenv
-  command: anyenv install ndenv
+  command: anyenv install -f ndenv
 - name: install node
   shell: ndenv install $(ndenv install -l | grep -v - | tail -1)
 - name: global node

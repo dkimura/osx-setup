@@ -1,9 +1,8 @@
 - name: change login shell
-  shell: chsh -s /bin/zsh
-# install oh-my-zsh
+  user: name={{ansible_user}} shell=/bin/zsh
 - name: install oh-my-zsh
   shell: sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)
   args:
     creates: ~/.oh-my-zsh
-- name: add 
+- name: add HOMEBREW_CASK_OPTS path
   shell: echo 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"' >> ~/.zshrc
