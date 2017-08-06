@@ -8,33 +8,33 @@ homebrew_packages:
   - { name: heroku }
   - { name: hub }
   - { name: jq }
+  - { name: mas }
+  - { name: openssl, state: linked, install_options: force }
+  - { name: python }
   - { name: tig }
   - { name: tree }
-  - { name: python }
+  - { name: watchman }
   - { name: wget }
   - { name: zsh }
-  - { name: openssl, state: linked, install_options: force }
-  - { name: mas }
-  - { name: watchman }
 homebrew_cask_packages:
   # browsers
+  - { name: firefox }
   - { name: google-chrome }
   - { name: google-japanese-ime }
-  - { name: firefox }
   # editor
   - { name: skitch }
   - { name: visual-studio-code }
   # communication tools
-  - { name: slack }
   - { name: skype }
+  - { name: slack }
   # utils
   - { name: iterm2 }
   - { name: the-unarchiver }
   # etc
-  - { name: clipy }
-  - { name: java }
-  - { name: dropbox }
-  - { name: vagrant }
-  - { name: virtualbox }
   - { name: 1password }
   - { name: bettertouchtool }
+  - { name: clipy }
+  - { name: dropbox }
+  - { name: java }
+  - { name: vagrant }
+  - { name: virtualbox }
