@@ -4,13 +4,14 @@ homebrew_taps:
   - homebrew/bundle
 homebrew_packages:
   - { name: curl }
+  - { name: fish }
   - { name: git }
   - { name: heroku }
   - { name: hub }
   - { name: jq }
   - { name: mas }
   - { name: openssl, state: linked, install_options: force }
-  - { name: python }
+  - { name: peco }
   - { name: tig }
   - { name: tree }
   - { name: watchman }
@@ -36,5 +37,7 @@ homebrew_cask_packages:
   - { name: clipy }
   - { name: dropbox }
   - { name: java }
+  - { name: screenhero }
+  - { name: totalspaces }
   - { name: vagrant }
   - { name: virtualbox }
