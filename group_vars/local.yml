@@ -22,22 +22,24 @@ homebrew_cask_packages:
   - { name: firefox }
   - { name: google-chrome }
   - { name: google-japanese-ime }
-  # editor
+  # editor and design tools
   - { name: skitch }
   - { name: visual-studio-code }
+  - { name: sketch }
   # communication tools
   - { name: skype }
   - { name: slack }
   # utils
-  - { name: iterm2 }
-  - { name: the-unarchiver }
-  # etc
   - { name: 1password }
   - { name: bettertouchtool }
   - { name: clipy }
+  - { name: dash }
   - { name: dropbox }
+  - { name: iterm2 }
   - { name: java }
+  - { name: karabiner-elements }
   - { name: screenhero }
+  - { name: the-unarchiver }
   - { name: totalspaces }
   - { name: vagrant }
   - { name: virtualbox }
