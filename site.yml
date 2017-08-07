@@ -5,5 +5,5 @@
   roles:
     - homebrew
     - git
-    - zsh
-    - lang
+    - fish
+    - nvm
