@@ -6,3 +6,7 @@
   shell: curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
 - name: install fisher plugins
   shell: fisher install z fzf nvm omf/peco
+- name: deploy fish config
+  template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True
+- name: fish update completions
+  shell: fish_update_completions
