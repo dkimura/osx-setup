@@ -1,0 +1,6 @@
+- name: install nvm
+  shell: curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+- name: install latest node.js
+  shell: nvm install $(nvm ls-remote | grep -v - | tail -1)
+- name: set latest node.js
+  shell: nvm use $(nvm ls-remote | grep -v - | tail -1)

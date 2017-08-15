@@ -1,0 +1,12 @@
+- name: add fish to /etc/shells
+  lineinfile: dest=/etc/shells line="/usr/local/bin/fish" state=present
+- name: change login shell
+  user: name={{ansible_user}} shell=/usr/local/bin/fish
+- name: install fisherman
+  shell: curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
+- name: install fisher plugins
+  shell: fisher install z fzf yoshiori/fish-peco_select_ghq_repository nvm omf/peco omf/plugin-balias
+- name: deploy fish config
+  template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True
+- name: fish update completions
+  shell: fish_update_completions

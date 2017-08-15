@@ -4,37 +4,43 @@ homebrew_taps:
   - homebrew/bundle
 homebrew_packages:
   - { name: curl }
+  - { name: fish }
   - { name: git }
   - { name: heroku }
   - { name: hub }
   - { name: jq }
+  - { name: mas }
+  - { name: openssl, state: linked, install_options: force }
+  - { name: peco }
   - { name: tig }
   - { name: tree }
-  - { name: python }
+  - { name: watchman }
   - { name: wget }
   - { name: zsh }
-  - { name: openssl, state: linked, install_options: force }
-  - { name: mas }
-  - { name: watchman }
 homebrew_cask_packages:
   # browsers
+  - { name: firefox }
   - { name: google-chrome }
   - { name: google-japanese-ime }
-  - { name: firefox }
-  # editor
+  # editor and design tools
   - { name: skitch }
   - { name: visual-studio-code }
+  - { name: sketch }
   # communication tools
-  - { name: slack }
   - { name: skype }
+  - { name: slack }
   # utils
-  - { name: iterm2 }
-  - { name: the-unarchiver }
-  # etc
+  - { name: 1password }
+  - { name: alfred }
+  - { name: bettertouchtool }
   - { name: clipy }
-  - { name: java }
+  - { name: dash }
   - { name: dropbox }
+  - { name: iterm2 }
+  - { name: java }
+  - { name: karabiner-elements }
+  - { name: screenhero }
+  - { name: the-unarchiver }
+  - { name: totalspaces }
   - { name: vagrant }
   - { name: virtualbox }
-  - { name: 1password }
-  - { name: bettertouchtool }
