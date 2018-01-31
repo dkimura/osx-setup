@@ -5,11 +5,13 @@ homebrew_taps:
 homebrew_packages:
   - { name: curl }
   - { name: fish }
+  - { name: ghq }
   - { name: git }
   - { name: heroku }
   - { name: hub }
   - { name: jq }
   - { name: mas }
+  - { name: nvm }
   - { name: openssl, state: linked, install_options: force }
   - { name: peco }
   - { name: tig }
@@ -27,14 +29,15 @@ homebrew_cask_packages:
   - { name: visual-studio-code }
   - { name: sketch }
   # communication tools
-  - { name: skype }
+  - { name: discord }
   - { name: slack }
   # utils
   - { name: 1password }
   - { name: alfred }
+  - { name: appcleaner }
   - { name: bettertouchtool }
   - { name: clipy }
-  - { name: dash }
+  - { name: docker }
   - { name: dropbox }
   - { name: iterm2 }
   - { name: java }
