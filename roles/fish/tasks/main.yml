@@ -1,12 +1,33 @@
-- name: add fish to /etc/shells
-  lineinfile: dest=/etc/shells line="/usr/local/bin/fish" state=present
-- name: change login shell
-  user: name={{ansible_user}} shell=/usr/local/bin/fish
-- name: install fisherman
-  shell: curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
-- name: install fisher plugins
-  shell: fisher install z fzf nvm omf/peco omf/plugin-balias rbenv
-- name: deploy fish config
-  template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True
-- name: fish update completions
-  shell: fish_update_completions
+  - name: fish-shell setup
+    block:
+      - name: set fish-shell default
+        become: true
+        lineinfile:
+          path: /etc/shells
+          regexp: '/opt/homebrew/bin/fish'
+          insertafter: '/bin/zsh'
+          line: '/opt/homebrew/bin/fish'
+      - name: set fish-shell as default
+        become: true
+        user:
+          name: "{{ ansible_user_id }}"
+          shell: /opt/homebrew/bin/fish
+      - name: Download fisher plugin manager
+        ansible.builtin.get_url:
+          url: https://git.io/fisher
+          dest: '{{ ansible_env.HOME }}/fisher'
+      - name: Install fisher plugin manager
+        ansible.builtin.shell: "source {{ ansible_env.HOME }}/fisher && fisher install jorgebucaran/fisher"
+        args:
+          executable: /opt/homebrew/bin/fish
+          creates: '{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish'
+      - name: Delete fisher installer file
+        file:
+          dest: '{{ ansible_env.HOME }}/fisher'
+          state: absent
+      - name: Install z plugin for fish
+        ansible.builtin.shell: "fisher install decors/fish-ghq rstacruz/fish-asdf catppuccin/fish"
+        args:
+          executable: /opt/homebrew/bin/fish
+      - name: Deploy fish config
+        template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True

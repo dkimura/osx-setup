@@ -1,4 +1,0 @@
-- name: install latest node.js
-  shell: nvm install $(nvm ls-remote | grep -v - | tail -1)
-- name: set latest node.js
-  shell: nvm use $(nvm ls-remote | grep -v - | tail -1)

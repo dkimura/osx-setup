@@ -1,52 +1,35 @@
-homebrew_taps:
-  - caskroom/cask
-  - homebrew/bundle
 homebrew_packages:
-  - { name: curl }
-  - { name: fish }
-  - { name: ghq }
-  - { name: git }
-  - { name: github-nippou }
-  - { name: heroku }
-  - { name: hub }
-  - { name: jq }
-  - { name: mas }
-  - { name: mysql }
-  - { name: nvm }
-  - { name: openssl, state: linked, install_options: force }
-  - { name: peco }
-  - { name: tig }
-  - { name: tree }
-  - { name: watchman }
-  - { name: wget }
-  - { name: zsh }
+  - name: asdf
+  - name: curl
+  - name: fish
+  - name: ghq
+  - name: git
+  - name: jq
+  - name: mas
+  - name: peco
+  - name: tig
+  - name: tree
+  - name: wget
 homebrew_cask_packages:
   # browsers
-  - { name: firefox }
-  - { name: google-chrome }
-  - { name: google-japanese-ime }
-  # editor and design tools
-  - { name: skitch }
-  - { name: visual-studio-code }
-  - { name: sketch }
+  - name: firefox
+  - name: google-chrome
+  # ime
+  - name: google-japanese-ime
+  # editor
+  - name: visual-studio-code
   # communication tools
-  - { name: discord }
-  - { name: slack }
+  - name: discord
+  - name: slack
+  - name: zoom
+  - name: notion
   # utils
-  - { name: 1password }
-  - { name: alfred }
-  - { name: appcleaner }
-  - { name: bettertouchtool }
-  - { name: clipy }
-  - { name: docker }
-  - { name: dropbox }
-  - { name: iterm2 }
-  - { name: java }
-  - { name: kap }
-  - { name: karabiner-elements }
-  - { name: screenhero }
-  - { name: sequel-pro }
-  - { name: the-unarchiver }
-  - { name: totalspaces }
-  - { name: vagrant }
-  - { name: virtualbox }
+  - name: 1password
+  - name: clipy
+  - name: docker
+  - name: iterm2
+  - name: kap
+  - name: karabiner-elements
+  - name: deepl
+  - name: spectacle
+  - name: appcleaner
