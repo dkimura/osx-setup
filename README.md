@@ -1,33 +1,33 @@
 # OSX Setup
 
-- Software Update
+## Software Update
 
 ```
 $ sudo softwareupdate --install --recommended
 ```
 
-- Install Xcode
+## Install Xcode
 
 ```
 $ xcode-select --install
 ```
 
-- Install Homebrew
+## Install Homebrew
 
 ```
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-- Clone this repository
+## Clone this repository
 
 ```
 $ git clone git@github.com:dkimura/osx-setup.git
 ```
 
-- Run Ainsible
+## Run Ansible
 
 ```
 $ brew update
 $ brew install ansible
-$ HOMEBREW_CASK_OPTS="--appdir=/Applications" ansible-playbook site.yml -vvvv
+$ ansible-playbook site.yml -vvvv
 ```
