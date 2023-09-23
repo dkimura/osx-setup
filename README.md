@@ -29,5 +29,5 @@ $ git clone git@github.com:dkimura/osx-setup.git
 ```
 $ brew update
 $ brew install ansible
-$ ansible-playbook site.yml -vvvv
+$ ansible-playbook localhost.yml --ask-become-pass
 ```
