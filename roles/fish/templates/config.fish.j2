@@ -3,5 +3,6 @@ function fish_user_key_bindings
   bind \c] 'peco_select_ghq_repository'
 end
 
-#balias g git
-balias g 'cd (ghq root)/(ghq list | peco)'
+alias g='cd (ghq root)/(ghq list | peco)'
+
+set -x OPENAI_API_KEY
