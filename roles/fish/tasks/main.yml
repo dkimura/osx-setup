@@ -4,30 +4,36 @@
         become: true
         lineinfile:
           path: /etc/shells
-          regexp: '/opt/homebrew/bin/fish'
+          regexp: '/usr/local/bin/fish'
           insertafter: '/bin/zsh'
-          line: '/opt/homebrew/bin/fish'
+          line: '/usr/local/bin/fish'
+
       - name: set fish-shell as default
         become: true
         user:
           name: "{{ ansible_user_id }}"
-          shell: /opt/homebrew/bin/fish
+          shell: /usr/local/bin/fish
+
       - name: Download fisher plugin manager
         ansible.builtin.get_url:
           url: https://git.io/fisher
           dest: '{{ ansible_env.HOME }}/fisher'
+
       - name: Install fisher plugin manager
         ansible.builtin.shell: "source {{ ansible_env.HOME }}/fisher && fisher install jorgebucaran/fisher"
         args:
-          executable: /opt/homebrew/bin/fish
+          executable: /usr/local/bin/fish
           creates: '{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish'
+
       - name: Delete fisher installer file
         file:
           dest: '{{ ansible_env.HOME }}/fisher'
           state: absent
+
       - name: Install z plugin for fish
-        ansible.builtin.shell: "fisher install decors/fish-ghq rstacruz/fish-asdf catppuccin/fish"
+        ansible.builtin.shell: "fisher install decors/fish-ghq catppuccin/fish"
         args:
-          executable: /opt/homebrew/bin/fish
+          executable: /usr/local/bin/fish
+
       - name: Deploy fish config
         template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True
