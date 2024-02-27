@@ -2,32 +2,32 @@
 
 ## Software Update
 
-```
-$ sudo softwareupdate --install --recommended
+```bash
+sudo softwareupdate --install --recommended
 ```
 
 ## Install Xcode
 
-```
-$ xcode-select --install
+```bash
+xcode-select --install
 ```
 
 ## Install Homebrew
 
-```
-$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```bash
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
 ## Clone this repository
 
-```
-$ git clone git@github.com:dkimura/osx-setup.git
+```bash
+git clone git@github.com:dkimura/osx-setup.git
 ```
 
 ## Run Ansible
 
-```
-$ brew update
-$ brew install ansible
-$ ansible-playbook localhost.yml --ask-become-pass
+```bash
+brew update
+brew install ansible
+ansible-playbook localhost.yml --ask-become-pass
 ```
