@@ -1,9 +1,21 @@
 function fish_user_key_bindings
+  # peco
   bind \cr 'peco_select_history (commandline -b)'
   bind \c] 'peco_select_ghq_repository'
+  # homebrew
   set PATH /opt/homebrew/bin $PATH
 end
 
+# ghq
 alias g='cd (ghq root)/(ghq list | peco)'
 
+# aicommit
 set -x OPENAI_API_KEY
+
+# opencommit
+set -x OCO_OPENAI_API_KEY
+set -x OCO_EMOJI true
+set -x OCO_DESCRIPTION false
+
+# mise for fish
+mise activate fish | source
