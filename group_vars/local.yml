@@ -1,35 +1,39 @@
 homebrew_packages:
-  - name: asdf
   - name: curl
   - name: fish
+  - name: gh
   - name: ghq
+  - name: gibo
   - name: git
   - name: jq
   - name: mas
+  - name: mise
   - name: peco
   - name: tig
   - name: tree
   - name: wget
 homebrew_cask_packages:
   # browsers
-  - name: firefox
   - name: google-chrome
   # ime
   - name: google-japanese-ime
   # editor
   - name: visual-studio-code
   # communication tools
-  - name: discord
   - name: slack
   - name: zoom
   - name: notion
+  - name: miro
   # utils
   - name: 1password
+  - name: appcleaner
+  - name: caffeine
   - name: clipy
+  - name: deepl
   - name: docker
+  - name: figma
+  - name: font-monaspace
   - name: iterm2
   - name: kap
   - name: karabiner-elements
-  - name: deepl
   - name: spectacle
-  - name: appcleaner
