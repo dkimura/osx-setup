@@ -1,5 +1,5 @@
 ---
-- name: Setup my Mackbook
+- name: Setup my OSX
   hosts: localhost
   connection: local
   roles:
