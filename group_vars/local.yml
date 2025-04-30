@@ -18,22 +18,25 @@ homebrew_cask_packages:
   # ime
   - name: google-japanese-ime
   # editor
-  - name: visual-studio-code
+  - name: cursor
   # communication tools
   - name: slack
   - name: zoom
   - name: notion
-  - name: miro
+  - name: gather
   # utils
   - name: 1password
   - name: appcleaner
   - name: caffeine
   - name: clipy
   - name: deepl
-  - name: docker
   - name: figma
   - name: font-monaspace
-  - name: iterm2
+  - name: ghostty
+  - name: jordanbaird-ice
   - name: kap
   - name: karabiner-elements
-  - name: spectacle
+  - name: logi-options+
+  - name: meetingbar
+  - name: rancher
+  - name: rectangle
