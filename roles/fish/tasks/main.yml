@@ -1,39 +1,94 @@
-  - name: fish-shell setup
-    block:
-      - name: set fish-shell default
-        become: true
-        lineinfile:
-          path: /etc/shells
-          regexp: '/usr/local/bin/fish'
-          insertafter: '/bin/zsh'
-          line: '/usr/local/bin/fish'
+- name: Set fish as default shell
+  block:
+    # 現在のシェルをチェック
+    - name: Check current shell
+      command: dscl . -read /Users/{{ ansible_user_id }} UserShell
+      register: current_shell
+      check_mode: no
+      changed_when: false
 
-      - name: set fish-shell as default
-        become: true
-        user:
-          name: "{{ ansible_user_id }}"
-          shell: /usr/local/bin/fish
+    # アーキテクチャの確認を追加
+    - name: Debug system info
+      debug:
+        msg:
+          - "Architecture: {{ ansible_architecture }}"
+          - "Current shell: {{ current_shell.stdout }}"
+          - "Fish path: {{ fish_shell_path | default('undefined') }}"
 
-      - name: Download fisher plugin manager
-        ansible.builtin.get_url:
-          url: https://git.io/fisher
-          dest: '{{ ansible_env.HOME }}/fisher'
+    # /etc/shellsの確認
+    - name: Check if fish is in /etc/shells
+      command: grep -Fxq "{{ fish_shell_path | quote }}" /etc/shells
+      register: fish_in_shells
+      check_mode: no
+      changed_when: false
+      failed_when: false
 
-      - name: Install fisher plugin manager
-        ansible.builtin.shell: "source {{ ansible_env.HOME }}/fisher && fisher install jorgebucaran/fisher"
-        args:
-          executable: /usr/local/bin/fish
-          creates: '{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish'
+    # /etc/shellsにfishのパスを追加
+    - name: Add fish to /etc/shells
+      become: true
+      lineinfile:
+        path: /etc/shells
+        line: "{{ fish_shell_path }}"
+        create: yes
+        state: present
+      when: fish_in_shells.rc != 0
 
-      - name: Delete fisher installer file
-        file:
-          dest: '{{ ansible_env.HOME }}/fisher'
-          state: absent
+    # デフォルトシェルの変更
+    - name: Change default shell to fish
+      become: true
+      command: "chsh -s {{ fish_shell_path }} {{ ansible_user_id }}"
+      register: chsh_result
+      changed_when: chsh_result.rc == 0
+      failed_when: chsh_result.rc != 0
+      when: >
+        current_shell.stdout is defined and
+        (current_shell.stdout | regex_replace('^UserShell:\\s*', '')) != fish_shell_path
 
-      - name: Install z plugin for fish
-        ansible.builtin.shell: "fisher install decors/fish-ghq catppuccin/fish"
-        args:
-          executable: /usr/local/bin/fish
+    # fisherの確認
+    - name: Check if fisher is installed
+      stat:
+        path: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+      register: fisher_check
 
-      - name: Deploy fish config
-        template: src=config.fish.j2 dest=~/.config/fish/config.fish force=True
+    # fisherのインストール
+    - name: Ensure fish config directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config/fish"
+        state: directory
+        mode: "0755"
+      when: not fisher_check.stat.exists
+
+    - name: Download fisher
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish
+        dest: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+        mode: "0644"
+        force: yes
+      when: not fisher_check.stat.exists
+
+    # プラグインの確認
+    - name: Check installed plugins
+      shell: "fisher list"
+      register: installed_plugins
+      changed_when: false
+      failed_when: false
+      check_mode: no
+      args:
+        executable: "{{ fish_shell_path }}"
+      when: fisher_check.stat.exists
+
+    # プラグインのインストール
+    - name: Install fish plugins
+      ansible.builtin.shell: "fisher install catppuccin/fish decors/fish-ghq"
+      args:
+        executable: "{{ fish_shell_path }}"
+      when:
+        - fisher_check.stat.exists
+        - installed_plugins.stdout is defined
+        - not ('catppuccin/fish' in installed_plugins.stdout and 'decors/fish-ghq' in installed_plugins.stdout)
+  vars:
+    fish_shell_path: >-
+      {{
+        '/opt/homebrew/bin/fish' if ansible_architecture == 'arm64'
+        else '/usr/local/bin/fish'
+      }}
