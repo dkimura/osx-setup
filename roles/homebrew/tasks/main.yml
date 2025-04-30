@@ -1,19 +1,24 @@
 # brew install
 - name: setup homebrew
-  ignore_errors: yes
   block:
     - name: homebrew update
       homebrew:
-        update_homebrew: yes
+        update_homebrew: true
 
     - name: homebrew packages install
       homebrew:
-        name: '{{ item.name }}'
-        state: '{{ item.state | default("present") }}'
-      with_items: '{{ homebrew_packages }}'
+        name: '{{ homebrew_packages | map(attribute="name") | list }}'
+        state: present
+      when: homebrew_packages | length > 0
 
     - name: homebrew cask packages install
-      community.general.homebrew_cask: name={{ item.name }} state=installed
+      community.general.homebrew_cask:
+        name: '{{ homebrew_cask_packages | map(attribute="name") | list }}'
+        state: present
       environment:
         HOMEBREW_CASK_OPTS: "--appdir=/Applications"
-      with_items: '{{ homebrew_cask_packages }}'
+      when: homebrew_cask_packages | length > 0
+  rescue:
+    - name: Display homebrew error
+      debug:
+        msg: "Homebrewのインストールに失敗しました。詳細: {{ ansible_failed_result }}"

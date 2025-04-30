@@ -1,5 +1,23 @@
-- name: deploy gitconfig
-  template: src=gitconfig.j2 dest=~/.gitconfig force=True
+- name: Setup Git configuration
+  block:
+    - name: Deploy Git configuration files
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
+        mode: "0644"
+        backup: true
+        force: true
+      loop:
+        - { src: "gitconfig.j2", dest: ".gitconfig" }
+        - { src: "gitignore_global.j2", dest: ".gitignore_global" }
+      register: git_config_result
 
-- name: deploy gitignore_global
-  template: src=gitignore_global.j2 dest=~/.gitignore_global force=True
+    - name: Verify Git configuration
+      command: git config --list
+      register: git_config_check
+      changed_when: false
+      when: git_config_result.changed
+  rescue:
+    - name: Display Git configuration error
+      debug:
+        msg: "Git設定の展開に失敗しました。詳細: {{ ansible_failed_result }}"
