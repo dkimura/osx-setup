@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   roles:
+    - { role: macos, tags: ["macos"] }
     - { role: homebrew, tags: ["homebrew"] }
     - { role: git, tags: ["git"] }
     - { role: fish, tags: ["fish"] }
