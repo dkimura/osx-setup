@@ -5,6 +5,8 @@ homebrew_packages:
   - name: ghq
   - name: gibo
   - name: git
+  - name: github-nippou
+  - name: hadolint
   - name: jq
   - name: mas
   - name: mise
