@@ -5,6 +5,14 @@
       homebrew:
         update_homebrew: true
 
+    - name: homebrew tap
+      community.general.homebrew_tap:
+        name: masutaka/tap
+        state: present
+      tags:
+        - homebrew
+        - tap
+
     - name: homebrew packages install
       homebrew:
         name: '{{ homebrew_packages | map(attribute="name") | list }}'
