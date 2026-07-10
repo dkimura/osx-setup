@@ -4,19 +4,6 @@ min_version = "2026.7.5"
 idiomatic_version_file_enable_tools = ["go"]
 task.run_auto_install = false
 
-[tools]
-bun = "latest"
-"cargo:octorus" = "0.5.0"
-gcloud = "latest"
-"github:yusukebe/ax" = "v0.1.7"
-go = "1.25.0"
-java = "25.0.0"
-node = "latest"
-"npm:@openai/codex" = "latest"
-pnpm = "latest"
-python = "3.14.0"
-rust = "stable"
-
 [bootstrap.packages]
 "brew-cask:1password" = "latest"
 "brew-cask:1password-cli" = "latest"
@@ -74,6 +61,7 @@ rust = "stable"
 "brew:tree" = "latest"
 "brew:uv" = "latest"
 "brew:wget" = "latest"
+"brew:yusukebe/tap/ax" = "latest"
 
 [bootstrap.hooks.pre-packages]
 run = "/bin/bash scripts/ensure-homebrew.sh"
