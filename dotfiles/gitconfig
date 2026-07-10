@@ -6,11 +6,13 @@
 	safecrlf = true
 	quotepath = false
 	precomposeunicode = true
+	excludesfile = ~/.gitignore_global
 [push]
 	default = simple
 	autoSetupRemote = true
 [credential]
-	helper = wincred
+	helper =
+	helper = osxkeychain
 [color]
 	diff = auto
 	status = auto
@@ -23,3 +25,5 @@
 	insteadOf = https://bitbucket.org/
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+[github-nippou]
+	user = dkimura

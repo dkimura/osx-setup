@@ -1,0 +1,109 @@
+min_version = "2026.7.5"
+
+[settings]
+idiomatic_version_file_enable_tools = ["go"]
+task.run_auto_install = false
+
+[tools]
+bun = "latest"
+"cargo:octorus" = "0.5.0"
+gcloud = "latest"
+"github:yusukebe/ax" = "v0.1.7"
+go = "1.25.0"
+java = "25.0.0"
+node = "latest"
+"npm:@openai/codex" = "latest"
+pnpm = "latest"
+python = "3.14.0"
+rust = "stable"
+
+[bootstrap.packages]
+"brew-cask:1password" = "latest"
+"brew-cask:1password-cli" = "latest"
+"brew-cask:appcleaner" = "latest"
+"brew-cask:arc" = "latest"
+"brew-cask:caffeine" = "latest"
+"brew-cask:claude" = "latest"
+"brew-cask:clipy" = "latest"
+"brew-cask:cmux" = "latest"
+"brew-cask:figma" = "latest"
+"brew-cask:font-hack-nerd-font" = "latest"
+"brew-cask:font-monaspace" = "latest"
+"brew-cask:font-plemol-jp" = "latest"
+"brew-cask:font-plemol-jp-hs" = "latest"
+"brew-cask:font-plemol-jp-nf" = "latest"
+"brew-cask:google-chrome" = "latest"
+"brew-cask:granola" = "latest"
+"brew-cask:kap" = "latest"
+"brew-cask:karabiner-elements" = "latest"
+"brew-cask:meetingbar" = "latest"
+"brew-cask:nani" = "latest"
+"brew-cask:obsidian" = "latest"
+"brew-cask:openlogi" = "latest"
+"brew-cask:rancher" = "latest"
+"brew-cask:rectangle" = "latest"
+"brew-cask:smoothcsv" = "latest"
+"brew-cask:thaw" = "latest"
+"brew-cask:typeless" = "latest"
+"brew-cask:zed" = "latest"
+"brew:act" = "latest"
+"brew:actionlint" = "latest"
+"brew:cmake" = "latest"
+"brew:crit" = "latest"
+"brew:curl" = "latest"
+"brew:direnv" = "latest"
+"brew:fish" = "latest"
+"brew:gh" = "latest"
+"brew:ghq" = "latest"
+"brew:gibo" = "latest"
+"brew:git" = "latest"
+"brew:gitui" = "latest"
+"brew:hadolint" = "latest"
+"brew:jq" = "latest"
+"brew:k1low/tap/mo" = "latest"
+"brew:mas" = "latest"
+"brew:masutaka/tap/github-nippou" = "latest"
+"brew:mise" = "latest"
+"brew:peco" = "latest"
+"brew:pinact" = "latest"
+"brew:poppler" = "latest"
+"brew:ripgrep" = "latest"
+"brew:sqlc" = "latest"
+"brew:starship" = "latest"
+"brew:tig" = "latest"
+"brew:tree" = "latest"
+"brew:uv" = "latest"
+"brew:wget" = "latest"
+
+[bootstrap.hooks.pre-packages]
+run = "/bin/bash scripts/ensure-homebrew.sh"
+
+[bootstrap.macos.dock]
+autohide = true
+show_recents = false
+
+[bootstrap.macos.finder]
+show_pathbar = true
+
+[bootstrap.macos.trackpad]
+tap_to_click = true
+
+[bootstrap.macos.defaults]
+NSGlobalDomain = { InitialKeyRepeat = 15.0, KeyRepeat = 2.0 }
+"com.apple.universalaccess" = { reduceMotion = true }
+
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
+[bootstrap.mise_shell_activate]
+fish = "activate"
+
+[dotfiles]
+"~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
+"~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
+"~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
+"~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
+
+[tasks.bootstrap]
+description = "Install missing Fish plugins"
+run = "/opt/homebrew/bin/fish scripts/bootstrap-fish.fish"
