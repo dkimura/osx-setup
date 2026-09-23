@@ -50,6 +50,7 @@ task.run_auto_install = false
 "brew:hadolint" = "latest"
 "brew:jq" = "latest"
 "brew:mas" = "latest"
+"brew:mosh" = "latest"
 "brew:peco" = "latest"
 "brew:pinact" = "latest"
 "brew:poppler" = "latest"

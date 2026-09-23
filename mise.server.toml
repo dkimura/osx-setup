@@ -1,0 +1,14 @@
+# Loaded only with `-E server`, on the Mac that hosts herdr sessions for remote clients.
+
+# moshi-hook's interactive first-run prompt is skipped; run `moshi-hook set --first-run` by hand.
+[bootstrap.hooks.post-packages]
+run = 'test -x ~/.local/bin/moshi-hook || curl -fsSL https://getmoshi.app/install.sh | MOSHI_HOOK_SKIP_FIRST_RUN=1 sh'
+
+# Replaces `brew services start moshi-hook`, matching the Homebrew formula's service block.
+[bootstrap.macos.launchd.agents.moshi-hook]
+program = "~/.local/bin/moshi-hook"
+args = ["serve"]
+run_at_load = true
+keep_alive = true
+stdout_path = "~/Library/Logs/moshi-hook.log"
+stderr_path = "~/Library/Logs/moshi-hook.log"

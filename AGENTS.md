@@ -13,6 +13,7 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 ## 構成
 
 - `mise.toml`: パッケージ、macOS defaults、Dock、ログインシェル、dotfiles、bootstrap タスク、`doctor.checks`。
+- `mise.server.toml`: herdr セッションをリモートに公開するホスト用の設定。`-E server` のときだけ読まれ、hook は `mise.toml` の hook のあとに追加で実行される。ホスト以外の Mac に要らないものはここに書く。
 - `dotfiles/`: `[dotfiles]` の source。Karabiner はディレクトリごと、`fish_plugins` はファイルを symlink で管理する。GUI や `fisher install` の変更がそのままリポジトリの差分になる。Karabiner の `automatic_backups/`・`assets/` は `.gitignore` で除外している。
 
 ## 検証
@@ -22,6 +23,7 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 ```bash
 mise bootstrap status
 mise bootstrap --dry-run
+mise bootstrap -E server --dry-run
 mise doctor project
 git diff --check
 ```

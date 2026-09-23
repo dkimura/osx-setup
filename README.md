@@ -30,11 +30,38 @@ cd ~/Document/ghq/github.com/dkimura/osx-setup
 mise bootstrap packages apply --manager mas
 ```
 
+## スマートフォンからの接続
+
+Moshi（iOS・Android）や別の Mac から Tailscale 経由で SSH・Mosh 接続し、ホストの Mac の herdr を操作する。Tailscale と mosh はどの Mac にも入る。
+
+ホストにする Mac だけ、`-E server` を付けて bootstrap する。`mise.server.toml` も読み込まれ、moshi-hook が入り、`moshi-hook serve` が LaunchAgent で常駐する。
+
+```bash
+cd ~/Document/ghq/github.com/dkimura/osx-setup
+mise bootstrap -E server
+```
+
+ホストでは、続けて次を手で行う。
+
+1. システム設定 → 一般 → 共有 → リモートログインをオンにする。
+2. システム設定 → エネルギーで、ディスプレイがオフのときに自動でスリープさせない。
+3. Tailscale.app にログインする。
+4. `moshi-hook set --first-run` で初期設定をする。bootstrap は対話が要るこの手順を飛ばす。
+5. Moshi の Settings → Hooks でトークンを出し、ペアリングして Claude Code にフックを入れる。
+
+```bash
+moshi-hook pair --token <token>
+moshi-hook install
+```
+
+`moshi-hook install` は `~/.claude/settings.json` を書き換える。ログは `~/Library/Logs/moshi-hook.log` に出る。
+
 ## 構成
 
 ```text
 osx-setup/
 ├── mise.toml             # パッケージ・macOS 設定・dotfiles・タスクの宣言
+├── mise.server.toml      # -E server のときだけ読む、ホスト用の設定（moshi-hook）
 └── dotfiles/
     ├── fish/
     │   ├── config.fish   # ~/.config/fish/config.fish の管理ブロック
