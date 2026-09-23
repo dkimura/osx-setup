@@ -28,7 +28,6 @@ task.run_auto_install = false
 "brew-cask:nani" = "latest"
 "brew-cask:obsidian" = "latest"
 "brew-cask:openlogi" = "latest"
-"brew-cask:rancher" = "latest"
 "brew-cask:rectangle" = "latest"
 "brew-cask:smoothcsv" = "latest"
 "brew-cask:thaw" = "latest"
