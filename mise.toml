@@ -62,6 +62,14 @@ task.run_auto_install = false
 "brew:wget" = "latest"
 "mas:539883307" = "latest" # LINE
 
+# Agent CLIs use their official installers and update themselves.
+[bootstrap.hooks.post-packages]
+run = '''
+test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
+test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
+test -x ~/.local/bin/herdr || curl -fsSL https://herdr.dev/install.sh | sh
+'''
+
 [bootstrap.macos.dock]
 autohide = true
 show_recents = false
@@ -91,6 +99,7 @@ fish = "activate"
 "~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
 "~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
 "~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
+"~/.config/ghostty/config" = { source = "dotfiles/ghostty/config" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }

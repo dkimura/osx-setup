@@ -1,0 +1,51 @@
+# Ghostty Configuration
+
+# アップデート
+auto-update = download
+auto-update-channel = stable
+
+# テーマ
+theme = TokyoNight
+
+# フォント
+font-family = PlemolJP35 Console NF
+font-size = 16
+adjust-cell-height = 2
+font-thicken = true
+
+# 背景透過
+background-opacity = 0.85
+background-blur-radius = 20
+
+# カーソル
+cursor-opacity = 0.8
+cursor-color = ffffff
+
+# ウィンドウ
+maximize = true
+window-padding-x = 4
+window-padding-y = 4
+window-padding-balance = true
+window-subtitle = working-directory
+window-theme = system
+window-save-state = always
+window-inherit-working-directory = true
+
+# 分割ペイン
+unfocused-split-opacity = 0.5
+
+# クリップボード
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
+
+# Shell統合
+shell-integration = detect
+
+# macOS固有
+macos-non-native-fullscreen = true
+macos-titlebar-style = tabs
+macos-option-as-alt = false
+
+# キーバインド
+keybind = shift+enter=text:\x1b\r

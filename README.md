@@ -40,6 +40,7 @@ osx-setup/
     │   ├── config.fish   # ~/.config/fish/config.fish の管理ブロック
     │   ├── fish_plugins  # symlink。fisher install で書き換わる
     │   └── conf.d/direnv.fish
+    ├── ghostty/config    # ~/.config/ghostty/config に symlink
     ├── karabiner/        # ~/.config/karabiner ごと symlink
     ├── mise/osx-setup.toml # mise の自動更新と、Homebrew 本家にない CLI（github: で入れる）
     ├── gitconfig         # ~/.gitconfig の管理ブロック
