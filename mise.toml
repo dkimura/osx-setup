@@ -30,6 +30,7 @@ task.run_auto_install = false
 "brew-cask:openlogi" = "latest"
 "brew-cask:rectangle" = "latest"
 "brew-cask:smoothcsv" = "latest"
+"brew-cask:tailscale-app" = "latest"
 "brew-cask:thaw" = "latest"
 "brew-cask:typeless" = "latest"
 "brew-cask:zed" = "latest"
