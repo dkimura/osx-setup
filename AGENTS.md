@@ -40,6 +40,7 @@ git diff --check
 - `mise dot apply` と `mise bootstrap` は、対象を指定しないと宣言された dotfiles をすべて適用する。marker ブロックの外は残り、実ファイルを symlink に置き換える操作は拒否される。このマシンに適用するときは、`mise dot apply <target> --dry-run` で確かめてから対象を絞る。`--force` を使う前に既存ファイルを退避する。
 - `mise dot add --source <相対パス>` は相対パスの symlink を作り、リンクが壊れる。追加後は `readlink <target>` と `test -e <target>` でリンク先が存在するか確かめ、壊れていれば `mise dot apply <target>` で作り直す。
 - symlink の source を移動・改名すると、既存マシンのリンクが切れる。
+- パッケージは dotfiles より先に入る。Karabiner のインストーラが `~/.config/karabiner` を先に作るため、新しい Mac では `--force-dotfiles` を付けて bootstrap する。
 - `fisher update` は、取得に失敗したプラグインを `fish_plugins` から消す。bootstrap タスクはこれに備えて実行前の一覧を控え、変わっていたら元に戻して失敗させる。この処理は消さない。変えたときは、成功時に一覧が変わらないことと、失敗時に元に戻ることを確かめる。
 
 ## 文書とコミット

@@ -17,8 +17,11 @@ mise を入れ、このリポジトリを clone して適用する。途中で�
 curl https://mise.run | sh
 ~/.local/bin/mise bootstrap \
   --from https://github.com/dkimura/osx-setup.git \
-  --from-dir ~/Document/ghq/github.com/dkimura/osx-setup
+  --from-dir ~/Document/ghq/github.com/dkimura/osx-setup \
+  --force-dotfiles
 ```
+
+`--force-dotfiles` は、Karabiner のインストーラが先に作る `~/.config/karabiner` を symlink で置き換えるために付ける。
 
 完了したらログインし直し、Karabiner-Elements の権限を許可する。App Store にサインインしてから、App Store のアプリを入れる。
 
