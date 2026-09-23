@@ -49,7 +49,6 @@ task.run_auto_install = false
 "brew:gitui" = "latest"
 "brew:hadolint" = "latest"
 "brew:jq" = "latest"
-"brew:k1low/tap/mo" = "latest"
 "brew:mas" = "latest"
 "brew:peco" = "latest"
 "brew:pinact" = "latest"
@@ -61,7 +60,6 @@ task.run_auto_install = false
 "brew:tree" = "latest"
 "brew:uv" = "latest"
 "brew:wget" = "latest"
-"brew:yusukebe/tap/ax" = "latest"
 "mas:539883307" = "latest" # LINE
 
 [bootstrap.macos.dock]

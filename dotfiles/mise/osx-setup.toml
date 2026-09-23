@@ -1,2 +1,6 @@
 [settings]
 auto_update = true
+
+[tools]
+"github:k1LoW/mo" = "latest"
+"github:yusukebe/ax" = "latest"

@@ -20,8 +20,6 @@ curl https://mise.run | sh
   --from-dir ~/Document/ghq/github.com/dkimura/osx-setup
 ```
 
-`--dry-run` は付けない。サードパーティ tap の評価に Ruby 3 が要り、dry-run はそこで失敗する。
-
 完了したらログインし直し、Karabiner-Elements の権限を許可する。App Store にサインインしてから、App Store のアプリを入れる。
 
 ```bash
@@ -40,7 +38,7 @@ osx-setup/
     │   ├── fish_plugins  # symlink。fisher install で書き換わる
     │   └── conf.d/direnv.fish
     ├── karabiner/        # ~/.config/karabiner ごと symlink
-    ├── mise/osx-setup.toml # mise 本体の自動更新（auto_update）
+    ├── mise/osx-setup.toml # mise の自動更新と、Homebrew 本家にない CLI（github: で入れる）
     ├── gitconfig         # ~/.gitconfig の管理ブロック
     └── gitignore_global
 ```

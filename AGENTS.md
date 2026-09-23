@@ -7,7 +7,7 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 - mise は 2026.9.12 以上が必要（`min_version`）。PATH 上に別の mise があり得るので、作業前に `command -v mise` と `mise --version` を確認する。
 - Homebrew 本体は使わない。`brew:` / `brew-cask:` は mise が `/opt/homebrew` へ直接入れる。`brew` コマンドや Homebrew のインストールを前提にした hook・スクリプト、`brew:mise` を足さない。
 - 公開リポジトリなので、秘密値・トークン・個人のローカル設定を入れない。`config.fish` と `.gitconfig` は marker ブロックだけを管理し、ブロック外はマシンごとの領域として触らない。
-- `[tools]` は使わない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書く。
+- `mise.toml` に `[tools]` は書かない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書き、Homebrew 本家にないものは `dotfiles/mise/osx-setup.toml` の `[tools]` に `github:` で書く。
 - `auto_update` のような global_only の設定は、`mise.toml` の `[settings]` に書いても無視される。`dotfiles/mise/osx-setup.toml` に書き、`~/.config/mise/conf.d/` へリンクする。
 
 ## 構成
@@ -31,9 +31,8 @@ git diff --check
 
 ## パッケージを足すとき
 
-- サードパーティ tap は、対象が Formula か Cask か、定義がどこにあるかを tap のリポジトリで確かめる。Homebrew で入ることは根拠にならない。
-- 未導入の tap Formula は、Ruby 3 以上がないと dry-run の評価で失敗する。apply では mise が Ruby を用意するが、Formula の構文対応やビルドの成功までは保証しない。
-- tap の Cask は、mise の DSL が対応していない記述があると Ruby があっても失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。Formula と同じに動くと決めつけない。
+- サードパーティ tap は使わない。tap の Formula は mise がソースからビルドし、Ruby 3 やビルド用ツールが要る。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/osx-setup.toml` に `github:owner/repo` で書く。
+- tap の Cask も、mise の DSL が対応していない記述があると失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
 
 ## dotfiles を変えるとき
