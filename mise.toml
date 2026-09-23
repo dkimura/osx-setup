@@ -1,4 +1,4 @@
-min_version = "2026.7.5"
+min_version = "2026.9.12"
 
 [settings]
 idiomatic_version_file_enable_tools = ["go"]
@@ -19,6 +19,7 @@ task.run_auto_install = false
 "brew-cask:font-plemol-jp" = "latest"
 "brew-cask:font-plemol-jp-hs" = "latest"
 "brew-cask:font-plemol-jp-nf" = "latest"
+"brew-cask:ghostty" = "latest"
 "brew-cask:google-chrome" = "latest"
 "brew-cask:granola" = "latest"
 "brew-cask:kap" = "latest"
@@ -39,6 +40,7 @@ task.run_auto_install = false
 "brew:crit" = "latest"
 "brew:curl" = "latest"
 "brew:direnv" = "latest"
+"brew:fisher" = "latest"
 "brew:fish" = "latest"
 "brew:gh" = "latest"
 "brew:ghq" = "latest"
@@ -49,8 +51,6 @@ task.run_auto_install = false
 "brew:jq" = "latest"
 "brew:k1low/tap/mo" = "latest"
 "brew:mas" = "latest"
-"brew:masutaka/tap/github-nippou" = "latest"
-"brew:mise" = "latest"
 "brew:peco" = "latest"
 "brew:pinact" = "latest"
 "brew:poppler" = "latest"
@@ -62,13 +62,16 @@ task.run_auto_install = false
 "brew:uv" = "latest"
 "brew:wget" = "latest"
 "brew:yusukebe/tap/ax" = "latest"
-
-[bootstrap.hooks.pre-packages]
-run = "/bin/bash scripts/ensure-homebrew.sh"
+"mas:539883307" = "latest" # LINE
 
 [bootstrap.macos.dock]
 autohide = true
 show_recents = false
+apps = [
+  "/System/Applications/Apps.app",
+  "/Applications/Arc.app",
+  "/Applications/Ghostty.app",
+]
 
 [bootstrap.macos.finder]
 show_pathbar = true
@@ -87,11 +90,32 @@ login_shell = "/opt/homebrew/bin/fish"
 fish = "activate"
 
 [dotfiles]
-"~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
 "~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
+"~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
+"~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
+"~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
 
 [tasks.bootstrap]
-description = "Install missing Fish plugins"
-run = "/opt/homebrew/bin/fish scripts/bootstrap-fish.fish"
+description = "Install Fish plugins listed in fish_plugins"
+# fisher update drops plugins it fails to fetch from fish_plugins; restore and fail instead.
+run = '''
+before="$(cat dotfiles/fish/fish_plugins)"
+/opt/homebrew/bin/fish -c 'fisher update'
+if [ "$(cat dotfiles/fish/fish_plugins)" != "$before" ] || [ ! -L ~/.config/fish/fish_plugins ]; then
+  printf '%s\n' "$before" > dotfiles/fish/fish_plugins
+  echo "fisher update failed for some plugins; restored fish_plugins. Run 'mise dot apply ~/.config/fish/fish_plugins' if the link is missing." >&2
+  exit 1
+fi
+'''
+
+[doctor.checks.arm64]
+description = "Running on Apple Silicon"
+run = "test \"$(uname -m)\" = arm64"
+hint = "This setup supports Apple Silicon Macs only. Do not run the terminal under Rosetta."
+
+[doctor.checks.clt]
+description = "Xcode Command Line Tools are installed"
+run = "xcode-select -p"
+hint = "Run `xcode-select --install` and wait for it to finish."

@@ -1,4 +1,4 @@
-fish_add_path --path --move --prepend /opt/homebrew/bin /opt/homebrew/sbin
+fish_add_path --path --move --prepend $HOME/.local/bin /opt/homebrew/bin /opt/homebrew/sbin
 
 if status is-interactive
   if not functions -q __starship_set_job_count
