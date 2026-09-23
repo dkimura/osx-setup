@@ -94,6 +94,7 @@ fish = "activate"
 "~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
 "~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
+"~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
 

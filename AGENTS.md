@@ -8,6 +8,7 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 - Homebrew 本体は使わない。`brew:` / `brew-cask:` は mise が `/opt/homebrew` へ直接入れる。`brew` コマンドや Homebrew のインストールを前提にした hook・スクリプト、`brew:mise` を足さない。
 - 公開リポジトリなので、秘密値・トークン・個人のローカル設定を入れない。`config.fish` と `.gitconfig` は marker ブロックだけを管理し、ブロック外はマシンごとの領域として触らない。
 - `[tools]` は使わない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書く。
+- `auto_update` のような global_only の設定は、`mise.toml` の `[settings]` に書いても無視される。`dotfiles/mise/osx-setup.toml` に書き、`~/.config/mise/conf.d/` へリンクする。
 
 ## 構成
 
