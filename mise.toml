@@ -63,11 +63,18 @@ task.run_auto_install = false
 "mas:539883307" = "latest" # LINE
 
 # Agent CLIs use their official installers and update themselves.
+# GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
 [bootstrap.hooks.post-packages]
 run = '''
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
 test -x ~/.local/bin/herdr || curl -fsSL https://herdr.dev/install.sh | sh
+if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
+  keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
+  [ -n "$keys" ] || { echo "failed to fetch GitHub SSH host keys" >&2; exit 1; }
+  mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  printf '%s\n' "$keys" >> ~/.ssh/known_hosts
+fi
 '''
 
 [bootstrap.macos.dock]

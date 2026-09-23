@@ -21,7 +21,7 @@ curl https://mise.run | sh
   --force-dotfiles
 ```
 
-`--force-dotfiles` は、Karabiner のインストーラが先に作る `~/.config/karabiner` を symlink で置き換えるために付ける。
+`--force-dotfiles` は、Karabiner のインストーラが先に作る `~/.config/karabiner` を symlink で置き換えるために付ける。GitHub の SSH ホスト鍵は、`~/.ssh/known_hosts` に github.com がなければ GitHub の API から取って登録する。
 
 完了したらログインし直し、Karabiner-Elements の権限を許可する。App Store にサインインしてから、App Store のアプリを入れる。
 
