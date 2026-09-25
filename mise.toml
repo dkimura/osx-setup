@@ -64,12 +64,22 @@ task.run_auto_install = false
 "mas:539883307" = "latest" # LINE
 
 # Agent CLIs use their official installers and update themselves.
+# Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
 [bootstrap.hooks.post-packages]
 run = '''
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
 test -x ~/.local/bin/herdr || curl -fsSL https://herdr.dev/install.sh | sh
+if [ ! -d /Applications/Orca.app ]; then
+  tmp="$(mktemp -d)"
+  curl -fsSL -o "$tmp/orca.dmg" https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg
+  hdiutil attach -nobrowse -readonly -mountpoint "$tmp/mnt" "$tmp/orca.dmg" >/dev/null
+  ditto "$tmp/mnt/Orca.app" /Applications/Orca.app
+  hdiutil detach "$tmp/mnt" >/dev/null
+  rm -rf "$tmp"
+fi
+test -e ~/.local/bin/orca || ln -s /Applications/Orca.app/Contents/Resources/bin/orca ~/.local/bin/orca
 if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
   [ -n "$keys" ] || { echo "failed to fetch GitHub SSH host keys" >&2; exit 1; }

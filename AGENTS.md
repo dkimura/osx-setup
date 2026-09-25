@@ -36,6 +36,7 @@ git diff --check
 - claude・codex・herdr は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
 - サードパーティ tap は使わない。tap の Formula は mise がソースからビルドし、Ruby 3 やビルド用ツールが要る。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/osx-setup.toml` に `github:owner/repo` で書く。
 - tap の Cask も、mise の DSL が対応していない記述があると失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。
+- tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
 
 ## dotfiles を変えるとき
