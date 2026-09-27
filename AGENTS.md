@@ -13,7 +13,7 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 ## 構成
 
 - `mise.toml`: パッケージ、macOS defaults、Dock、ログインシェル、dotfiles、bootstrap タスク、`doctor.checks`。
-- `mise.server.toml`: herdr セッションをリモートに公開するホスト用の設定。`-E server` のときだけ読まれ、hook は `mise.toml` の hook のあとに追加で実行される。ホスト以外の Mac に要らないものはここに書く。
+- `mise.server.toml`: 別の端末から接続するホスト用の設定。`-E server` のときだけ読まれ、hook は `mise.toml` の hook のあとに追加で実行される。ホスト以外の Mac に要らないものはここに書く。
 - `dotfiles/`: `[dotfiles]` の source。Karabiner はディレクトリごと、`fish_plugins` はファイルを symlink で管理する。GUI や `fisher install` の変更がそのままリポジトリの差分になる。Karabiner の `automatic_backups/`・`assets/` は `.gitignore` で除外している。
 
 ## 検証
@@ -33,7 +33,7 @@ git diff --check
 
 ## パッケージを足すとき
 
-- claude・codex・herdr は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
+- claude・codex は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
 - サードパーティ tap は使わない。tap の Formula は mise がソースからビルドし、Ruby 3 やビルド用ツールが要る。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/osx-setup.toml` に `github:owner/repo` で書く。
 - tap の Cask も、mise の DSL が対応していない記述があると失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。
 - tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。

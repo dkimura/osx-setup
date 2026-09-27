@@ -19,7 +19,6 @@ task.run_auto_install = false
 "brew-cask:font-plemol-jp" = "latest"
 "brew-cask:font-plemol-jp-hs" = "latest"
 "brew-cask:font-plemol-jp-nf" = "latest"
-"brew-cask:ghostty" = "latest"
 "brew-cask:google-chrome" = "latest"
 "brew-cask:granola" = "latest"
 "brew-cask:kap" = "latest"
@@ -50,7 +49,6 @@ task.run_auto_install = false
 "brew:hadolint" = "latest"
 "brew:jq" = "latest"
 "brew:mas" = "latest"
-"brew:mosh" = "latest"
 "brew:peco" = "latest"
 "brew:pinact" = "latest"
 "brew:poppler" = "latest"
@@ -70,7 +68,6 @@ task.run_auto_install = false
 run = '''
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
-test -x ~/.local/bin/herdr || curl -fsSL https://herdr.dev/install.sh | sh
 if [ ! -d /Applications/Orca.app ]; then
   tmp="$(mktemp -d)"
   curl -fsSL -o "$tmp/orca.dmg" https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg
@@ -94,7 +91,6 @@ show_recents = false
 apps = [
   "/System/Applications/Apps.app",
   "/Applications/Arc.app",
-  "/Applications/Ghostty.app",
 ]
 
 [bootstrap.macos.finder]
@@ -117,7 +113,6 @@ fish = "activate"
 "~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
 "~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
 "~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
-"~/.config/ghostty/config" = { source = "dotfiles/ghostty/config" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
