@@ -56,6 +56,28 @@ moshi-hook install
 
 `moshi-hook install` は `~/.claude/settings.json` を書き換える。ログは `~/Library/Logs/moshi-hook.log` に出る。
 
+## 更新
+
+リポジトリの変更を反映し、パッケージと mise を新しくする。ホストの Mac では `mise bootstrap` に `-E server` を付ける。
+
+```bash
+cd ~/Document/ghq/github.com/dkimura/osx-setup
+git pull
+mise dot diff
+mise bootstrap
+mise bootstrap packages upgrade --dry-run
+mise bootstrap packages upgrade
+mise upgrade
+sudo softwareupdate --install
+```
+
+- `mise dot diff` で、dotfiles の適用で消える変更がないか先に確かめる。`direnv.fish` と `.gitignore_global` はコピーで配るため、手元で足した行は `mise bootstrap` で上書きされる。残したい行は、リポジトリの `dotfiles/` に足してから適用する。
+- `mise bootstrap` は、新しく宣言したパッケージを入れ、Fish プラグインを `fisher update` で更新する。App Store のアプリを入れるときはパスワードを求められる。
+- `mise bootstrap packages upgrade` は、入っている Formula・Cask・App Store のアプリだけを最新にする。
+- `mise upgrade` は、`dotfiles/mise/osx-setup.toml` に `github:` で書いた CLI を更新する。
+- mise 本体は `auto_update` で自動で更新される。すぐ上げたいときは `mise self-update` を実行する。
+- claude・codex・herdr は、それぞれが自分で更新する。
+
 ## 構成
 
 ```text
