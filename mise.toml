@@ -10,6 +10,7 @@ task.run_auto_install = false
 "brew-cask:appcleaner" = "latest"
 "brew-cask:arc" = "latest"
 "brew-cask:caffeine" = "latest"
+"brew-cask:chatgpt" = "latest"
 "brew-cask:claude" = "latest"
 "brew-cask:clipy" = "latest"
 "brew-cask:cmux" = "latest"
