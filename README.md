@@ -34,7 +34,7 @@ mise bootstrap packages apply --manager mas
 
 別の端末から Tailscale 経由で、ホストの Mac に SSH 接続する。Tailscale はどの Mac にも入る。
 
-SSH の鍵は 1Password に置き、ファイルとしては配らない。`~/.ssh/config` の管理ブロックで、どの Mac も 1Password の SSH agent を使う。各 Mac で 1Password にサインインし、設定 → 開発者で SSH agent をオンにする。同じ鍵で commit にも署名する（`~/.gitconfig` の管理ブロック）。公開鍵は、ホストの `~/.ssh/authorized_keys` と、GitHub の認証用・署名用の両方に登録する。
+SSH の鍵は 1Password に置き、ファイルとしては配らない。`~/.ssh/config` の管理ブロックで、どの Mac も 1Password の SSH agent を使う。各 Mac で 1Password にサインインし、設定 → 開発者で SSH agent をオンにする。サインインは自動化できないので手で行う。`mise doctor project` で、agent が動いているか確かめられる。同じ鍵で commit にも署名する（`~/.gitconfig` の管理ブロック）。公開鍵は、ホストの `~/.ssh/authorized_keys` と、GitHub の認証用・署名用の両方に登録する。
 
 ホストにする Mac では、次を手で行う。
 

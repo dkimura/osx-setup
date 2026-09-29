@@ -143,3 +143,8 @@ hint = "This setup supports Apple Silicon Macs only. Do not run the terminal und
 description = "Xcode Command Line Tools are installed"
 run = "xcode-select -p"
 hint = "Run `xcode-select --install` and wait for it to finish."
+
+[doctor.checks.onepassword-ssh-agent]
+description = "1Password SSH agent is running"
+run = "test -S \"$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
+hint = "Sign in to 1Password and turn on Settings → Developer → Use the SSH agent."
