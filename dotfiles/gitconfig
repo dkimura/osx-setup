@@ -1,6 +1,7 @@
 [user]
 	email = dkimura@bdd.xyz
 	name = Daichi Kimura
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNYERVL4UIMa0Jz6wlRzW87eN/hlTZwuKoFSSCkmW1+
 [core]
 	autocrlf = false
 	safecrlf = true
@@ -21,3 +22,9 @@
 	root = ~/Document/ghq
 [init]
 	defaultBranch = main
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true

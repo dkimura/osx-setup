@@ -34,6 +34,8 @@ mise bootstrap packages apply --manager mas
 
 別の端末から Tailscale 経由で、ホストの Mac に SSH 接続する。Tailscale はどの Mac にも入る。
 
+SSH の鍵は 1Password に置き、ファイルとしては配らない。`~/.ssh/config` の管理ブロックで、どの Mac も 1Password の SSH agent を使う。各 Mac で 1Password にサインインし、設定 → 開発者で SSH agent をオンにする。同じ鍵で commit にも署名する（`~/.gitconfig` の管理ブロック）。公開鍵は、ホストの `~/.ssh/authorized_keys` と、GitHub の認証用・署名用の両方に登録する。
+
 ホストにする Mac では、次を手で行う。
 
 1. システム設定 → 一般 → 共有 → リモートログインをオンにする。
@@ -75,7 +77,8 @@ osx-setup/
     ├── karabiner/        # ~/.config/karabiner ごと symlink
     ├── mise/osx-setup.toml # mise の自動更新と、Homebrew 本家にない CLI（github: で入れる）
     ├── gitconfig         # ~/.gitconfig の管理ブロック
-    └── gitignore_global
+    ├── gitignore_global
+    └── ssh/config        # ~/.ssh/config の管理ブロック。1Password の SSH agent を使う
 ```
 
 symlink のリンク先はこのリポジトリなので、clone 先は動かさない。

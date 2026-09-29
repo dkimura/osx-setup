@@ -118,6 +118,7 @@ fish = "activate"
 "~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
+"~/.ssh/config/osx-setup" = { source = "dotfiles/ssh/config", comment = "#" }
 
 [tasks.bootstrap]
 description = "Install Fish plugins listed in fish_plugins"
