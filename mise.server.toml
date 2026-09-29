@@ -1,2 +1,0 @@
-# Loaded only with `-E server`, on the Mac that other devices connect to over Tailscale.
-# Nothing is host-only right now; add settings other Macs don't need here.

@@ -40,11 +40,9 @@ mise bootstrap packages apply --manager mas
 2. システム設定 → エネルギーで、ディスプレイがオフのときに自動でスリープさせない。
 3. Tailscale.app にログインする。
 
-ホストだけに要る設定は `mise.server.toml` に書き、`-E server` を付けて bootstrap する。いまは中身がない。
-
 ## 更新
 
-リポジトリの変更を反映し、パッケージと mise を新しくする。ホストの Mac では `mise bootstrap` に `-E server` を付ける。
+リポジトリの変更を反映し、パッケージと mise を新しくする。
 
 ```bash
 cd ~/Document/ghq/github.com/dkimura/osx-setup
@@ -69,7 +67,6 @@ sudo softwareupdate --install
 ```text
 osx-setup/
 ├── mise.toml             # パッケージ・macOS 設定・dotfiles・タスクの宣言
-├── mise.server.toml      # -E server のときだけ読む、ホスト用の設定
 └── dotfiles/
     ├── fish/
     │   ├── config.fish   # ~/.config/fish/config.fish の管理ブロック
