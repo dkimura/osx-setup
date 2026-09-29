@@ -70,6 +70,7 @@ sudo softwareupdate --install
 osx-setup/
 ├── mise.toml             # パッケージ・macOS 設定・dotfiles・タスクの宣言
 └── dotfiles/
+    ├── allowed_signers   # ~/.config/git/allowed_signers に symlink。手元で commit の署名を検証する
     ├── fish/
     │   ├── config.fish   # ~/.config/fish/config.fish の管理ブロック
     │   ├── fish_plugins  # symlink。fisher install で書き換わる

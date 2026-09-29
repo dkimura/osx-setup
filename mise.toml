@@ -114,6 +114,7 @@ fish = "activate"
 "~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
 "~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
 "~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
+"~/.config/git/allowed_signers" = { source = "dotfiles/allowed_signers" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
