@@ -11,11 +11,6 @@ if status is-interactive
   end
 
   alias g='cd (ghq root)/(ghq list | peco)'
-  abbr -a or 'command or'
-
-  if functions -q __agmsg_codex_path_prepend
-    functions --erase __agmsg_codex_path_prepend
-  end
 
   if test -d $HOME/.agents/bin
     fish_add_path --path --move --prepend $HOME/.agents/bin
