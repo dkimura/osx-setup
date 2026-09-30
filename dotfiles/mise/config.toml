@@ -2,5 +2,8 @@
 auto_update = true
 
 [tools]
+bun = "latest"
+go = "latest"
+node = "26.10.0"
 "github:k1LoW/mo" = "latest"
 "github:yusukebe/ax" = "latest"

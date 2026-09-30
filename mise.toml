@@ -125,7 +125,7 @@ fish = "activate"
 "~/.config/fish/config.fish/osx-setup" = { source = "dotfiles/fish/config.fish", comment = "#" }
 "~/.config/git/allowed_signers" = { source = "dotfiles/allowed_signers" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
-"~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
+"~/.config/mise/config.toml" = { source = "dotfiles/mise/config.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
 "~/Library/LaunchAgents/com.github.abiosoft.colima.plist" = { source = "dotfiles/launchd/com.github.abiosoft.colima.plist", mode = "copy" }

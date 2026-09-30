@@ -7,8 +7,8 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 - mise は 2026.9.12 以上が必要（`min_version`）。PATH 上に別の mise があり得るので、作業前に `command -v mise` と `mise --version` を確認する。
 - Homebrew 本体は使わない。`brew:` / `brew-cask:` は mise が `/opt/homebrew` へ直接入れる。`brew` コマンドや Homebrew のインストールを前提にした hook・スクリプト、`brew:mise` を足さない。
 - 公開リポジトリなので、秘密値・トークン・個人のローカル設定を入れない。`config.fish`・`.gitconfig`・`~/.ssh/config` は marker ブロックだけを管理し、ブロック外はマシンごとの領域として触らない。
-- `mise.toml` に `[tools]` は書かない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書き、Homebrew 本家にないものは `dotfiles/mise/osx-setup.toml` の `[tools]` に `github:` で書く。
-- `auto_update` のような global_only の設定は、`mise.toml` の `[settings]` に書いても無視される。`dotfiles/mise/osx-setup.toml` に書き、`~/.config/mise/conf.d/` へリンクする。
+- `mise.toml` に `[tools]` は書かない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書き、Homebrew 本家にないものは `dotfiles/mise/config.toml` の `[tools]` に `github:` で書く。bun・go・node のようなランタイムも `dotfiles/mise/config.toml` に書く。
+- `auto_update` のような global_only の設定は、`mise.toml` の `[settings]` に書いても無視される。`dotfiles/mise/config.toml` に書く。このファイルは `~/.config/mise/config.toml` に symlink するので、`mise use -g` の変更もそのままリポジトリの差分になる。
 
 ## 構成
 
@@ -32,7 +32,7 @@ git diff --check
 ## パッケージを足すとき
 
 - claude・codex は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
-- サードパーティ tap は使わない。tap の Formula は mise がソースからビルドし、Ruby 3 やビルド用ツールが要る。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/osx-setup.toml` に `github:owner/repo` で書く。
+- サードパーティ tap は使わない。tap の Formula は mise がソースからビルドし、Ruby 3 やビルド用ツールが要る。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/config.toml` に `github:owner/repo` で書く。
 - tap の Cask も、mise の DSL が対応していない記述があると失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。
 - tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
