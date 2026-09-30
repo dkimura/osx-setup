@@ -34,7 +34,6 @@ task.run_auto_install = false
 "brew:act" = "latest"
 "brew:actionlint" = "latest"
 "brew:colima" = "latest"
-"brew:curl" = "latest"
 "brew:direnv" = "latest"
 "brew:docker" = "latest"
 "brew:docker-buildx" = "latest"
