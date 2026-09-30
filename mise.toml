@@ -37,9 +37,13 @@ task.run_auto_install = false
 "brew:act" = "latest"
 "brew:actionlint" = "latest"
 "brew:cmake" = "latest"
+"brew:colima" = "latest"
 "brew:crit" = "latest"
 "brew:curl" = "latest"
 "brew:direnv" = "latest"
+"brew:docker" = "latest"
+"brew:docker-buildx" = "latest"
+"brew:docker-compose" = "latest"
 "brew:fisher" = "latest"
 "brew:fish" = "latest"
 "brew:gh" = "latest"
@@ -65,6 +69,7 @@ task.run_auto_install = false
 # Agent CLIs use their official installers and update themselves.
 # Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
+# Docker finds the Compose and buildx formulae only through ~/.docker/cli-plugins; colima owns ~/.docker/config.json.
 [bootstrap.hooks.post-packages]
 run = '''
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
@@ -84,6 +89,10 @@ if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   mkdir -p ~/.ssh && chmod 700 ~/.ssh
   printf '%s\n' "$keys" >> ~/.ssh/known_hosts
 fi
+mkdir -p ~/.docker/cli-plugins
+for plugin in docker-buildx docker-compose; do
+  ln -sfn "/opt/homebrew/lib/docker/cli-plugins/$plugin" ~/.docker/cli-plugins/"$plugin"
+done
 '''
 
 [bootstrap.macos.dock]
@@ -119,6 +128,7 @@ fish = "activate"
 "~/.config/mise/conf.d/osx-setup.toml" = { source = "dotfiles/mise/osx-setup.toml" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
+"~/Library/LaunchAgents/com.github.abiosoft.colima.plist" = { source = "dotfiles/launchd/com.github.abiosoft.colima.plist", mode = "copy" }
 "~/.ssh/config/osx-setup" = { source = "dotfiles/ssh/config", comment = "#" }
 
 [tasks.bootstrap]
