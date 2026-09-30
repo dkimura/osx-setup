@@ -38,6 +38,12 @@ git diff --check
 - tap の Cask も、mise の DSL が対応していない記述があると失敗する。github-nippou は `generate_completions_from_executable` が原因で外した。
 - tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
+- keg-only の Formula は `/opt/homebrew/bin` にリンクされない。curl は macOS にあるため keg-only で、入れても `/usr/bin/curl` が使われていた。足す前に `https://formulae.brew.sh/api/formula/<name>.json` の `keg_only` を確かめる。
+
+## パッケージを外すとき
+
+- `[bootstrap.packages]` から消しても、入っているパッケージは残る。`mise bootstrap packages prune --dry-run` で消える対象を確かめてから `prune` し、残った空の `Cellar/<name>/` を `mise run cleanup` で消す。どちらも頼まれたときだけ実行する。
+- `packages upgrade` は古い版を Cellar に残す。openssl@3 では、upgrade 後もリンクが古い版を指したままだった。古い版を消すときは、先に `/opt/homebrew` 配下のリンク先を確かめ、消したあとにリンク先のないリンクが残っていないか調べる。
 
 ## dotfiles を変えるとき
 

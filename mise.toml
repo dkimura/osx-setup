@@ -138,6 +138,18 @@ if [ "$(cat dotfiles/fish/fish_plugins)" != "$before" ] || [ ! -L ~/.config/fish
 fi
 '''
 
+[tasks.cleanup]
+description = "Remove Cellar directories that hold only a mise lock file"
+# `mise bootstrap packages prune` removes the keg but leaves Cellar/<name>/.mise-staging.lock behind.
+run = '''
+for dir in /opt/homebrew/Cellar/*/; do
+  if [ "$(ls -A "$dir")" = ".mise-staging.lock" ]; then
+    rm -r "$dir"
+    echo "removed ${dir%/}"
+  fi
+done
+'''
+
 [doctor.checks.arm64]
 description = "Running on Apple Silicon"
 run = "test \"$(uname -m)\" = arm64"

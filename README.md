@@ -73,6 +73,7 @@ sudo softwareupdate --install
 - 手元の実ファイルをsymlinkに置き換える適用は拒否される。そのファイルを退避してから、`mise dot apply <target> --force`で置き換える。
 - `mise bootstrap`は、新しく宣言したパッケージを入れ、Fishプラグインを`fisher update`で更新する。取得に失敗したプラグインがあると、`fish_plugins`を元に戻して止まる。App Storeのアプリを入れるときは、パスワードを求められる。
 - `mise bootstrap packages upgrade`は、入っているFormula・Cask・App Storeのアプリを最新にする。
+- 宣言から外したFormulaは、`mise bootstrap packages prune`で消す。消したあとに残る空のディレクトリは、`mise run cleanup`で片付ける。
 - `mise upgrade`は、`dotfiles/mise/config.toml`のツールを更新する。nodeは最新のLTSを追う。
 - mise本体は`auto_update`で自動で更新される。すぐ上げたいときは`mise self-update`を実行する。
 - claude・codex・Orcaは、それぞれ自分で更新する。
