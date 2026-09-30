@@ -1,6 +1,8 @@
 # AGENTS.md
 
-Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジトリ。宣言は `mise.toml` に集約し、手順は README.md に書く。
+Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジトリ。
+
+宣言は `mise.toml` に集約し、手順は README.md に書く。
 
 ## 前提
 

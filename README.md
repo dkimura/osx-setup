@@ -1,17 +1,15 @@
 # macOS setup
 
-Apple Silicon Mac のセットアップを `mise bootstrap` で宣言する。Homebrew 本体は入れず、Formula と Cask も mise が `/opt/homebrew` へ直接入れる。
-
 ## インストール
 
-macOS を更新し、Xcode Command Line Tools を入れる。どちらも完了を待つ。
+macOSを更新し、Xcode Command Line Toolsを入れる。どちらも完了するまで待つ。
 
 ```bash
 sudo softwareupdate --install
 xcode-select --install
 ```
 
-mise を入れ、このリポジトリを clone して適用する。途中でパスワードを求められる。
+miseを入れ、このリポジトリをcloneして適用する。途中でパスワードを求められる。
 
 ```bash
 curl https://mise.run | sh
@@ -21,30 +19,44 @@ curl https://mise.run | sh
   --force-dotfiles
 ```
 
-`--force-dotfiles` は、Karabiner のインストーラが先に作る `~/.config/karabiner` を symlink で置き換えるために付ける。GitHub の SSH ホスト鍵は、`~/.ssh/known_hosts` に github.com がなければ GitHub の API から取って登録する。
+Karabinerのインストーラは、dotfilesより先に`~/.config/karabiner`を作る。`--force-dotfiles`は、これをsymlinkで置き換えるために付ける。
 
-完了したらログインし直し、Karabiner-Elements の権限を許可する。App Store にサインインしてから、App Store のアプリを入れる。
+適用が終わったら、ログインし直してから次の順に進める。
+
+1. Karabiner-Elementsの権限を許可する。
+2. 1Passwordにサインインし、設定 → 開発者（Settings → Developer）でSSH agentをオンにする。commitには1Passwordの鍵で署名するので、ここを済ませるまでcommitは失敗する。
+3. App Storeにサインインする。
+4. 次のコマンドで、agentが動いているかを確かめ、App Storeのアプリを入れる。
 
 ```bash
 cd ~/Document/ghq/github.com/dkimura/osx-setup
+mise doctor project
 mise bootstrap packages apply --manager mas
 ```
 
+SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う。公開鍵は`dotfiles/allowed_signers`にあるものと同じで、GitHubの認証用と署名用、ホストの`~/.ssh/authorized_keys`に一度登録すれば足りる。
+
 ## リモート接続
 
-別の端末から Tailscale 経由で、ホストの Mac に SSH 接続する。Tailscale はどの Mac にも入る。
+別の端末からTailscale経由で、ホストのMacにSSH接続する。TailscaleはこのリポジトリでどのMacにも入る。
 
-SSH の鍵は 1Password に置き、ファイルとしては配らない。`~/.ssh/config` の管理ブロックで、どの Mac も 1Password の SSH agent を使う。各 Mac で 1Password にサインインし、設定 → 開発者で SSH agent をオンにする。サインインは自動化できないので手で行う。`mise doctor project` で、agent が動いているか確かめられる。同じ鍵で commit にも署名する（`~/.gitconfig` の管理ブロック）。公開鍵は、ホストの `~/.ssh/authorized_keys` と、GitHub の認証用・署名用の両方に登録する。
+ホストにするMacでは、さらに次のとおり設定する。
 
-ホストにする Mac では、次を手で行う。
+1. システム設定 → 一般 → 共有で、リモートログインをオンにする。
+2. システム設定 → エネルギーで、「ディスプレイがオフのときに自動でスリープさせない」をオンにする。
+3. Tailscale.appにログインする。
 
-1. システム設定 → 一般 → 共有 → リモートログインをオンにする。
-2. システム設定 → エネルギーで、ディスプレイがオフのときに自動でスリープさせない。
-3. Tailscale.app にログインする。
+## Docker
+
+DockerはColimaのVMで動く。`colima`・`docker`・`docker-compose`・`docker-buildx`はFormulaで入る。
+
+Colimaはログイン時にLaunchAgentから起動する。VMにはCPUを6個、メモリを12GiB割り当てる。bootstrapはplistを置くだけなので、Colimaが起動するのは次のログインからになる。起動の記録は`~/.colima/launchd.log`に残る。
+
+【未確認】新しいMacの初回起動では、VMのイメージのダウンロードに時間がかかる想定だ。
 
 ## 更新
 
-リポジトリの変更を反映し、パッケージと mise を新しくする。
+リポジトリの変更を反映し、パッケージ、ツール、macOSを更新する。
 
 ```bash
 cd ~/Document/ghq/github.com/dkimura/osx-setup
@@ -57,29 +69,31 @@ mise upgrade
 sudo softwareupdate --install
 ```
 
-- `mise dot diff` で、dotfiles の適用で消える変更がないか先に確かめる。`direnv.fish` と `.gitignore_global` はコピーで配るため、手元で足した行は `mise bootstrap` で上書きされる。残したい行は、リポジトリの `dotfiles/` に足してから適用する。
-- `mise bootstrap` は、新しく宣言したパッケージを入れ、Fish プラグインを `fisher update` で更新する。App Store のアプリを入れるときはパスワードを求められる。
-- `mise bootstrap packages upgrade` は、入っている Formula・Cask・App Store のアプリだけを最新にする。
-- `mise upgrade` は、`dotfiles/mise/osx-setup.toml` に `github:` で書いた CLI を更新する。
-- mise 本体は `auto_update` で自動で更新される。すぐ上げたいときは `mise self-update` を実行する。
-- claude・codex は、それぞれが自分で更新する。Orca はアプリが自分で更新する。
+- `mise dot diff`で、dotfilesを適用すると消える変更がないかを先に確かめる。`direnv.fish`・`.gitignore_global`・ColimaのLaunchAgentはコピーで配るので、手元で足した行は`mise bootstrap`で上書きされる。残したい行は、リポジトリの`dotfiles/`に足してから適用する。
+- 手元の実ファイルをsymlinkに置き換える適用は拒否される。そのファイルを退避してから、`mise dot apply <target> --force`で置き換える。
+- `mise bootstrap`は、新しく宣言したパッケージを入れ、Fishプラグインを`fisher update`で更新する。取得に失敗したプラグインがあると、`fish_plugins`を元に戻して止まる。App Storeのアプリを入れるときは、パスワードを求められる。
+- `mise bootstrap packages upgrade`は、入っているFormula・Cask・App Storeのアプリを最新にする。
+- `mise upgrade`は、`dotfiles/mise/config.toml`で`latest`にしたツールを更新する。バージョンを固定したnodeは上がらない。
+- mise本体は`auto_update`で自動で更新される。すぐ上げたいときは`mise self-update`を実行する。
+- claude・codex・Orcaは、それぞれ自分で更新する。
 
 ## 構成
 
 ```text
 osx-setup/
-├── mise.toml             # パッケージ・macOS 設定・dotfiles・タスクの宣言
+├── mise.toml             # パッケージ・macOS設定・dotfiles・タスクの宣言
 └── dotfiles/
-    ├── allowed_signers   # ~/.config/git/allowed_signers に symlink。手元で commit の署名を検証する
+    ├── allowed_signers   # ~/.config/git/allowed_signersにsymlink。手元でcommitの署名を検証する
     ├── fish/
-    │   ├── config.fish   # ~/.config/fish/config.fish の管理ブロック
-    │   ├── fish_plugins  # symlink。fisher install で書き換わる
-    │   └── conf.d/direnv.fish
-    ├── karabiner/        # ~/.config/karabiner ごと symlink
-    ├── mise/osx-setup.toml # mise の自動更新と、Homebrew 本家にない CLI（github: で入れる）
-    ├── gitconfig         # ~/.gitconfig の管理ブロック
-    ├── gitignore_global
-    └── ssh/config        # ~/.ssh/config の管理ブロック。1Password の SSH agent を使う
+    │   ├── config.fish   # ~/.config/fish/config.fishの管理ブロック
+    │   ├── fish_plugins  # symlink。fisher installで書き換わる
+    │   └── conf.d/direnv.fish # コピー
+    ├── gitconfig         # ~/.gitconfigの管理ブロック
+    ├── gitignore_global  # ~/.gitignore_globalにコピー
+    ├── karabiner/        # ~/.config/karabinerにディレクトリごとsymlink
+    ├── launchd/          # ~/Library/LaunchAgentsにコピー。ログイン時にColimaを起動する
+    ├── mise/config.toml  # ~/.config/mise/config.tomlにsymlink。miseの自動更新、ランタイム、Homebrew本家にないCLI
+    └── ssh/config        # ~/.ssh/configの管理ブロック。1PasswordのSSH agentを使う
 ```
 
-symlink のリンク先はこのリポジトリなので、clone 先は動かさない。
+symlinkのリンク先はこのリポジトリにある。clone先を動かすとリンクが切れるので、動かさない。
