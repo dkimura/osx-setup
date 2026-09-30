@@ -91,6 +91,10 @@ for plugin in docker-buildx docker-compose; do
 done
 '''
 
+# mise writes the Dock preferences but does not restart the Dock to show them.
+[bootstrap.hooks.post-defaults]
+run = "killall Dock || true"
+
 [bootstrap.macos.dock]
 autohide = true
 show_recents = false

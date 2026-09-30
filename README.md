@@ -9,6 +9,8 @@ sudo softwareupdate --install
 xcode-select --install
 ```
 
+システム設定 → プライバシーとセキュリティ → フルディスクアクセスで、使うターミナルをオンにし、⌘Qで終了して開き直す。フルディスクアクセスがないと、「視差効果を減らす」（`com.apple.universalaccess`）を書き込めずにbootstrapが止まる。
+
 miseを入れ、このリポジトリをcloneして適用する。途中でパスワードを求められる。
 
 ```bash
