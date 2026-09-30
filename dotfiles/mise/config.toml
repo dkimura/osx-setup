@@ -4,6 +4,5 @@ auto_update = true
 [tools]
 bun = "latest"
 go = "latest"
-node = "26.10.0"
-"github:k1LoW/mo" = "latest"
+node = "lts"
 "github:yusukebe/ax" = "latest"
