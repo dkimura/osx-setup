@@ -36,7 +36,7 @@ mise doctor project
 mise bootstrap packages apply --manager mas
 ```
 
-SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う。公開鍵は`dotfiles/allowed_signers`にあるものと同じで、GitHubの認証用と署名用、ホストの`~/.ssh/authorized_keys`に一度登録すれば足りる。
+SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う。公開鍵は`dotfiles/allowed_signers`の1行目と同じで、GitHubの認証用と署名用、ホストの`~/.ssh/authorized_keys`に一度登録すれば足りる。ホストのMacだけは、commitの署名に専用の鍵を使う（[リモート接続](#リモート接続)）。
 
 ## リモート接続
 
@@ -47,6 +47,17 @@ SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う�
 1. システム設定 → 一般 → 共有で、リモートログインをオンにする。
 2. システム設定 → エネルギーで、「ディスプレイがオフのときに自動でスリープさせない」をオンにする。
 3. Tailscale.appにログインする。
+4. commitの署名用に、1Passwordの外に専用の鍵を作ってGitHubに登録する。
+
+```bash
+ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519_signing -C 'git signing (Mac mini)'
+gh ssh-key add ~/.ssh/id_ed25519_signing.pub --type signing --title 'Mac mini signing'
+printf '[user]\n\tsigningkey = ~/.ssh/id_ed25519_signing\n[gpg "ssh"]\n\tprogram = ssh-keygen\n' > ~/.gitconfig.local
+```
+
+`gh`のトークンに`admin:ssh_signing_key`がなければ、先に`gh auth refresh -h github.com -s admin:ssh_signing_key`を実行する。公開鍵は`dotfiles/allowed_signers`にも足す。
+
+1Passwordの鍵で署名すると、commitのたびにホストの画面で承認が要る。1PasswordはMacの画面ロックに合わせてロックし、ロックすると承認も消えるので、リモートからは署名できない。`~/.gitconfig`の管理ブロックは最後に`~/.gitconfig.local`を読み込み、ホストではここで署名の鍵と`ssh-keygen`を指定する。ほかのMacにはこのファイルを置かない。
 
 ## Docker
 
@@ -91,7 +102,7 @@ osx-setup/
     │   ├── config.fish   # ~/.config/fish/config.fishの管理ブロック
     │   ├── fish_plugins  # symlink。fisher installで書き換わる
     │   └── conf.d/direnv.fish # コピー
-    ├── gitconfig         # ~/.gitconfigの管理ブロック
+    ├── gitconfig         # ~/.gitconfigの管理ブロック。最後に~/.gitconfig.localを読み込む
     ├── gitignore_global  # ~/.gitignore_globalにコピー
     ├── karabiner/        # ~/.config/karabinerにディレクトリごとsymlink
     ├── launchd/          # ~/Library/LaunchAgentsにコピー。ログイン時にColimaを起動する
