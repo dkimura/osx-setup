@@ -62,6 +62,7 @@ task.run_auto_install = false
 
 # Agent CLIs use their official installers and update themselves.
 # Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
+# Starship uses the Tokyo Night preset; an existing config is left alone.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
 # Docker finds the Compose and buildx formulae only through ~/.docker/cli-plugins; colima owns ~/.docker/config.json.
 [bootstrap.hooks.post-packages]
@@ -77,6 +78,7 @@ if [ ! -d /Applications/Orca.app ]; then
   rm -rf "$tmp"
 fi
 test -e ~/.local/bin/orca || ln -s /Applications/Orca.app/Contents/Resources/bin/orca ~/.local/bin/orca
+test -e ~/.config/starship.toml || { mkdir -p ~/.config && /opt/homebrew/bin/starship preset tokyo-night -o ~/.config/starship.toml; }
 if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
   [ -n "$keys" ] || { echo "failed to fetch GitHub SSH host keys" >&2; exit 1; }
