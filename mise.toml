@@ -38,6 +38,7 @@ task.run_auto_install = false
 "brew:docker" = "latest"
 "brew:docker-buildx" = "latest"
 "brew:docker-compose" = "latest"
+"brew:ffmpeg" = "latest"
 "brew:fisher" = "latest"
 "brew:fish" = "latest"
 "brew:gh" = "latest"
