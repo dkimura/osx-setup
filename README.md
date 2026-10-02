@@ -36,7 +36,7 @@ mise doctor project
 mise bootstrap packages apply --manager mas
 ```
 
-SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う。公開鍵は`dotfiles/allowed_signers`の1行目と同じで、GitHubの認証用と署名用、ホストの`~/.ssh/authorized_keys`に一度登録すれば足りる。ホストのMacだけは、commitの署名に専用の鍵を使う（[リモート接続](#リモート接続)）。
+SSHとcommitの署名には、どのMacも1Passwordにある同じ鍵を使う。公開鍵は`dotfiles/allowed_signers`の1行目と同じで、GitHubの認証用と署名用、ホストの`~/.ssh/authorized_keys`に一度登録すれば足りる。ホストのMacだけは、GitHubへのSSHとcommitの署名に専用の鍵を使う（[リモート接続](#リモート接続)）。
 
 ## リモート接続
 
@@ -58,6 +58,24 @@ printf '[user]\n\tsigningkey = ~/.ssh/id_ed25519_signing\n[gpg "ssh"]\n\tprogram
 `gh`のトークンに`admin:ssh_signing_key`がなければ、先に`gh auth refresh -h github.com -s admin:ssh_signing_key`を実行する。公開鍵は`dotfiles/allowed_signers`にも足す。
 
 1Passwordの鍵で署名すると、commitのたびにホストの画面で承認が要る。1PasswordはMacの画面ロックに合わせてロックし、ロックすると承認も消えるので、リモートからは署名できない。`~/.gitconfig`の管理ブロックは最後に`~/.gitconfig.local`を読み込み、ホストではここで署名の鍵と`ssh-keygen`を指定する。ほかのMacにはこのファイルを置かない。
+
+5. GitHubへのSSH用に、1Passwordの外に専用の鍵を作ってGitHubに登録する。
+
+```bash
+ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519 -C 'github (Mac mini)'
+gh ssh-key add ~/.ssh/id_ed25519.pub --title 'Mac mini'
+```
+
+`gh`のトークンに`admin:public_key`がなければ、先に`gh auth refresh -h github.com -s admin:public_key`を実行する。続けて、`~/.ssh/config`の管理ブロックより前に次を書く。
+
+```
+Host github.com
+    IdentityAgent none
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+```
+
+理由は署名と同じで、画面がロックされていると1Passwordの鍵ではSSHの認証も通らない。この設定がないと、sshは1Passwordの承認を1分近く待って`agent refused operation`を出し、そのあと`~/.ssh/id_ed25519`に切り替える。sshは先に書いた設定を優先するので、管理ブロックの`Host *`より前に置く。ほかのホストへのSSHは、これまでどおり1PasswordのSSH agentを使う。
 
 ## Docker
 
