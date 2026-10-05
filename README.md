@@ -107,7 +107,7 @@ sudo softwareupdate --install
 - 宣言から外したFormulaは、`mise bootstrap packages prune`で消す。消したあとに残る空のディレクトリは、`mise run cleanup`で片付ける。
 - `mise upgrade`は、`dotfiles/mise/config.toml`のツールを更新する。nodeは最新のLTSを追う。
 - mise本体は`auto_update`で自動で更新される。すぐ上げたいときは`mise self-update`を実行する。
-- claude・codex・Orcaは、それぞれ自分で更新する。
+- claude・codex・Orca・Kanaryは、それぞれ自分で更新する。
 
 ## 構成
 
