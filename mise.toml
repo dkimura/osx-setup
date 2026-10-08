@@ -136,6 +136,7 @@ fish = "activate"
 
 [tasks.bootstrap]
 description = "Install Fish plugins listed in fish_plugins"
+depends = ["skills"]
 # fisher update drops plugins it fails to fetch from fish_plugins; restore and fail instead.
 run = '''
 before="$(cat dotfiles/fish/fish_plugins)"
@@ -145,6 +146,36 @@ if [ "$(cat dotfiles/fish/fish_plugins)" != "$before" ] || [ ! -L ~/.config/fish
   echo "fisher update failed for some plugins; restored fish_plugins. Run 'mise dot apply ~/.config/fish/fish_plugins' if the link is missing." >&2
   exit 1
 fi
+'''
+
+[tasks.skills]
+description = "Install missing global agent skills"
+# The skills CLI cannot restore global skills from ~/.agents/.skill-lock.json, so each line lists a source and its skills.
+# Only missing skills are installed; `npx skills update -g` updates the rest. npx comes from node in dotfiles/mise/config.toml.
+# With Claude Code alone the CLI copies skills into ~/.claude/skills; adding Codex keeps them in ~/.agents/skills with symlinks.
+# npx reads stdin, so it gets /dev/null to leave the list below for the loop.
+run = '''
+while read -r source skills; do
+  missing=""
+  for skill in $skills; do
+    test -d ~/.agents/skills/"$skill" || missing="$missing $skill"
+  done
+  if [ -n "$missing" ]; then
+    npx -y skills add "$source" -g -a claude-code codex -y -s $missing </dev/null || exit 1
+  fi
+done <<'EOF'
+ayghri/i-have-adhd i-have-adhd
+coji/natural-japanese natural-japanese
+github/gh-stack gh-stack
+humanlayer/skills show-me visual-pr
+mattpocock/skills ask-matt code-review codebase-design diagnosing-bugs domain-modeling grill-with-docs implement implement-spec improve-codebase-architecture pr prototype research retro setup-matt-pocock-skills tdd to-spec to-tickets triage wayfinder wizard
+mattpocock/skills claude-handoff loop-me setup-ts-deep-modules writing-beats writing-fragments writing-shape
+mattpocock/skills git-guardrails-claude-code migrate-to-shoehorn scaffold-exercises setup-pre-commit
+mattpocock/skills grill-me grilling handoff teach to-questionnaire wait-what writing-for-agents
+nulab/bee using-bee
+stablyai/orca orca-cli orchestration
+vercel-labs/agent-browser agent-browser
+EOF
 '''
 
 [tasks.cleanup]

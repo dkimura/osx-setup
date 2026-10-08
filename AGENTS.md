@@ -39,6 +39,7 @@ git diff --check
 - tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
 - keg-only の Formula は `/opt/homebrew/bin` にリンクされない。curl は macOS にあるため keg-only で、入れても `/usr/bin/curl` が使われていた。足す前に `https://formulae.brew.sh/api/formula/<name>.json` の `keg_only` を確かめる。
+- エージェントのスキルは、`npx skills add -g` で入れたままにせず、`mise.toml` の `skills` タスクに出所と名前を書く。タスクは `~/.agents/skills` にないものだけを入れる。
 
 ## パッケージを外すとき
 
