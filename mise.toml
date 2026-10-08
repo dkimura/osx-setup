@@ -106,13 +106,15 @@ apps = [
 
 [bootstrap.macos.finder]
 show_pathbar = true
+preferred_view_style = "list"
 
 [bootstrap.macos.trackpad]
 tap_to_click = true
 
 [bootstrap.macos.defaults]
-NSGlobalDomain = { InitialKeyRepeat = 15.0, KeyRepeat = 2.0 }
+NSGlobalDomain = { AppleInterfaceStyleSwitchesAutomatically = true, InitialKeyRepeat = 15.0, KeyRepeat = 2.0 }
 "com.apple.universalaccess" = { reduceMotion = true }
+"com.knollsoft.Rectangle" = { allowAnyShortcut = true, alternateDefaultShortcuts = true, subsequentExecutionMode = 1 }
 
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/fish"
