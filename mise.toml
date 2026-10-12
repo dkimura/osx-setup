@@ -65,9 +65,10 @@ task.run_auto_install = false
 # Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
 # Starship uses the Tokyo Night preset; an existing config is left alone.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
-# Docker finds the Compose and buildx formulae only through ~/.docker/cli-plugins; colima owns ~/.docker/config.json.
+# Hooks run under `sh -o errexit`; pipefail stops a failed curl from passing silently.
 [bootstrap.hooks.post-packages]
 run = '''
+set -o pipefail
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
 if [ ! -d /Applications/Orca.app ]; then
@@ -78,7 +79,6 @@ if [ ! -d /Applications/Orca.app ]; then
   hdiutil detach "$tmp/mnt" >/dev/null
   rm -rf "$tmp"
 fi
-test -e ~/.local/bin/orca || ln -s /Applications/Orca.app/Contents/Resources/bin/orca ~/.local/bin/orca
 test -e ~/.config/starship.toml || { mkdir -p ~/.config && /opt/homebrew/bin/starship preset tokyo-night -o ~/.config/starship.toml; }
 if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
@@ -86,10 +86,6 @@ if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   mkdir -p ~/.ssh && chmod 700 ~/.ssh
   printf '%s\n' "$keys" >> ~/.ssh/known_hosts
 fi
-mkdir -p ~/.docker/cli-plugins
-for plugin in docker-buildx docker-compose; do
-  ln -sfn "/opt/homebrew/lib/docker/cli-plugins/$plugin" ~/.docker/cli-plugins/"$plugin"
-done
 '''
 
 # mise writes the Dock preferences but does not restart the Dock to show them.
@@ -122,6 +118,7 @@ login_shell = "/opt/homebrew/bin/fish"
 [bootstrap.mise_shell_activate]
 fish = "activate"
 
+# Docker finds the Compose and buildx formulae only through ~/.docker/cli-plugins; colima owns ~/.docker/config.json.
 [dotfiles]
 "~/.config/fish/conf.d/direnv.fish" = { source = "dotfiles/fish/conf.d/direnv.fish", mode = "copy" }
 "~/.config/fish/fish_plugins" = { source = "dotfiles/fish/fish_plugins" }
@@ -129,8 +126,11 @@ fish = "activate"
 "~/.config/git/allowed_signers" = { source = "dotfiles/allowed_signers" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.config/mise/config.toml" = { source = "dotfiles/mise/config.toml" }
+"~/.docker/cli-plugins/docker-buildx" = { source = "/opt/homebrew/lib/docker/cli-plugins/docker-buildx" }
+"~/.docker/cli-plugins/docker-compose" = { source = "/opt/homebrew/lib/docker/cli-plugins/docker-compose" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
+"~/.local/bin/orca" = { source = "/Applications/Orca.app/Contents/Resources/bin/orca" }
 "~/Library/LaunchAgents/com.github.abiosoft.colima.plist" = { source = "dotfiles/launchd/com.github.abiosoft.colima.plist", mode = "copy" }
 "~/.ssh/config/osx-setup" = { source = "dotfiles/ssh/config", comment = "#" }
 
