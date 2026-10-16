@@ -173,6 +173,7 @@ mattpocock/skills claude-handoff loop-me setup-ts-deep-modules writing-beats wri
 mattpocock/skills git-guardrails-claude-code migrate-to-shoehorn scaffold-exercises setup-pre-commit
 mattpocock/skills grill-me grilling handoff teach to-questionnaire wait-what writing-for-agents
 nulab/bee using-bee
+raine/git-surgeon git-surgeon
 stablyai/orca orca-cli orchestration
 vercel-labs/agent-browser agent-browser
 EOF

@@ -5,4 +5,5 @@ auto_update = true
 bun = "latest"
 go = "latest"
 node = "lts"
+"github:raine/git-surgeon" = "latest"
 "github:yusukebe/ax" = "latest"
