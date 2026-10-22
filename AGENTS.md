@@ -44,7 +44,7 @@ git diff --check
 ## パッケージを外すとき
 
 - `[bootstrap.packages]` から消しても、入っているパッケージは残る。`mise bootstrap packages prune --dry-run` で消える対象を確かめてから `prune` し、残った空の `Cellar/<name>/` を `mise run cleanup` で消す。どちらも頼まれたときだけ実行する。
-- `packages upgrade` は古い版を Cellar に残す。openssl@3 では、upgrade 後もリンクが古い版を指したままだった。古い版を消すときは、先に `/opt/homebrew` 配下のリンク先を確かめ、消したあとにリンク先のないリンクが残っていないか調べる。
+- `packages upgrade` は古い版を Cellar に残す。`mise run cleanup` は、`opt/<name>` のリンク先以外の版を消す。ただし upgrade 後も `/opt/homebrew` 配下のリンクが古い版を指したままのことがある（openssl@3・libx11）。リンクが向いている古い版は消さずに残し、`opt/<name>` が最新の版を指していない Formula は丸ごと飛ばす。`--dry-run` で対象を確かめてから、頼まれたときだけ実行する。残った版を手で消すときは、消したあとにリンク先のないリンクが残っていないか調べる。
 
 ## dotfiles を変えるとき
 

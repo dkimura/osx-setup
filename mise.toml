@@ -180,14 +180,51 @@ EOF
 '''
 
 [tasks.cleanup]
-description = "Remove Cellar directories that hold only a mise lock file"
+description = "Remove old Cellar kegs and Cellar directories that hold only a mise lock file"
+usage = 'flag "-n --dry-run" help="Print what would be removed without removing it"'
 # `mise bootstrap packages prune` removes the keg but leaves Cellar/<name>/.mise-staging.lock behind.
+# `mise bootstrap packages upgrade` relinks opt/<name> to the new keg but leaves the old keg in Cellar.
+# A keg other than the one opt/<name> points to is removed only if no link under /opt/homebrew points into it;
+# after upgrading openssl@3, links still pointed to the old keg. A formula whose opt/<name> is not the newest keg is skipped.
 run = '''
-for dir in /opt/homebrew/Cellar/*/; do
-  if [ "$(ls -A "$dir")" = ".mise-staging.lock" ]; then
-    rm -r "$dir"
-    echo "removed ${dir%/}"
+links="$(find /opt/homebrew -type l -exec stat -f '%N -> %Y/' {} +)"
+remove() {
+  if [ "$usage_dry_run" = true ]; then
+    echo "would remove $1"
+  else
+    rm -rf "$1"
+    echo "removed $1"
   fi
+}
+for dir in /opt/homebrew/Cellar/*/; do
+  dir="${dir%/}"
+  name="${dir##*/}"
+  if [ "$(ls -A "$dir")" = ".mise-staging.lock" ]; then
+    remove "$dir"
+    continue
+  fi
+  current="$(readlink "/opt/homebrew/opt/$name")" || continue
+  current="${current##*/}"
+  if [ ! -d "$dir/$current" ]; then
+    echo "skipped $name: opt/$name points to a missing keg" >&2
+    continue
+  fi
+  newest="$(ls "$dir" | sort -V | tail -n 1)"
+  if [ "$current" != "$newest" ]; then
+    echo "skipped $name: opt/$name points to $current but $newest is newer" >&2
+    continue
+  fi
+  for keg in "$dir"/*/; do
+    keg="${keg%/}"
+    version="${keg##*/}"
+    [ "$version" = "$current" ] && continue
+    if printf '%s\n' "$links" | awk -v self="$keg/" -v target="Cellar/$name/$version/" \
+      'index($0, self) != 1 && index($0, target) { found = 1; exit } END { exit !found }'; then
+      echo "kept $keg: links still point into it" >&2
+      continue
+    fi
+    remove "$keg"
+  done
 done
 '''
 

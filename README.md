@@ -96,6 +96,8 @@ mise dot diff
 mise bootstrap
 mise bootstrap packages upgrade --dry-run
 mise bootstrap packages upgrade
+mise run cleanup --dry-run
+mise run cleanup
 mise upgrade
 npx skills update -g
 sudo softwareupdate --install
@@ -104,7 +106,7 @@ sudo softwareupdate --install
 - `mise dot diff`で、dotfilesを適用すると消える変更がないかを先に確かめる。`direnv.fish`・`.gitignore_global`・ColimaのLaunchAgentはコピーで配るので、手元で足した行は`mise bootstrap`で上書きされる。残したい行は、リポジトリの`dotfiles/`に足してから適用する。
 - 手元の実ファイルをsymlinkに置き換える適用は拒否される。そのファイルを退避してから、`mise dot apply <target> --force`で置き換える。
 - `mise bootstrap`は、新しく宣言したパッケージを入れ、Fishプラグインを`fisher update`で更新する。取得に失敗したプラグインがあると、`fish_plugins`を元に戻して止まる。宣言したエージェントのスキルのうち、入っていないものを`npx skills add`で`~/.agents/skills`に入れる。App Storeのアプリを入れるときは、パスワードを求められる。
-- `mise bootstrap packages upgrade`は、入っているFormula・Cask・App Storeのアプリを最新にする。
+- `mise bootstrap packages upgrade`は、入っているFormula・Cask・App Storeのアプリを最新にする。Formulaの古い版は`Cellar`に残るので、`mise run cleanup`で消す。`/opt/homebrew`のリンクがまだ向いている版は消さずに残す。
 - 宣言から外したFormulaは、`mise bootstrap packages prune`で消す。消したあとに残る空のディレクトリは、`mise run cleanup`で片付ける。
 - `mise upgrade`は、`dotfiles/mise/config.toml`のツールを更新する。nodeは最新のLTSを追う。
 - `npx skills update -g`は、入っているスキルを最新にする。スキルを足すときは、`mise.toml`の`skills`タスクに出所と名前を書く。`~/.agents/.skill-lock.json`から復元するコマンドはないので、lockファイルは管理しない。
