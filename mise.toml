@@ -27,6 +27,7 @@ task.run_auto_install = false
 "brew-cask:obsidian" = "latest"
 "brew-cask:openlogi" = "latest"
 "brew-cask:rectangle" = "latest"
+"brew-cask:t3-code" = "latest"
 "brew-cask:tailscale-app" = "latest"
 "brew-cask:thaw" = "latest"
 "brew-cask:typeless" = "latest"
