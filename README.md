@@ -112,6 +112,7 @@ sudo softwareupdate --install
 - `npx skills update -g`は、入っているスキルを最新にする。スキルを足すときは、`mise.toml`の`skills`タスクに出所と名前を書く。`~/.agents/.skill-lock.json`から復元するコマンドはないので、lockファイルは管理しない。
 - mise本体は`auto_update`で自動で更新される。すぐ上げたいときは`mise self-update`を実行する。
 - claude・codex・Orcaは、それぞれ自分で更新する。
+- T3 CodeのCLI（`t3`）は、`t3 update`で更新する。アプリは自分で更新する。
 
 ## 構成
 

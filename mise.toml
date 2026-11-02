@@ -62,7 +62,7 @@ task.run_auto_install = false
 "brew:wget" = "latest"
 "mas:539883307" = "latest" # LINE
 
-# Agent CLIs use their official installers and update themselves.
+# Agent CLIs use their official installers; claude and codex update themselves, t3 updates with `t3 update`.
 # Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
 # Starship uses the Tokyo Night preset; an existing config is left alone.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
@@ -72,6 +72,7 @@ run = '''
 set -o pipefail
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
+test -x ~/.local/bin/t3 || curl -fsSL https://t3.codes/install.sh | sh
 if [ ! -d /Applications/Orca.app ]; then
   tmp="$(mktemp -d)"
   curl -fsSL -o "$tmp/orca.dmg" https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg
