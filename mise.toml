@@ -8,7 +8,6 @@ task.run_auto_install = false
 "brew-cask:1password" = "latest"
 "brew-cask:1password-cli" = "latest"
 "brew-cask:appcleaner" = "latest"
-"brew-cask:arc" = "latest"
 "brew-cask:caffeine" = "latest"
 "brew-cask:chatgpt" = "latest"
 "brew-cask:claude" = "latest"
@@ -63,6 +62,7 @@ task.run_auto_install = false
 "brew:tree" = "latest"
 "brew:uv" = "latest"
 "brew:wget" = "latest"
+"mas:361304891" = "latest" # Numbers
 "mas:539883307" = "latest" # LINE
 
 # Take over an app that is already installed instead of replacing it, which can revoke its Privacy & Security permissions.
@@ -101,7 +101,7 @@ autohide = true
 show_recents = false
 apps = [
   "/System/Applications/Apps.app",
-  "/Applications/Arc.app",
+  "/Applications/Dia.app",
 ]
 
 [bootstrap.macos.finder]
