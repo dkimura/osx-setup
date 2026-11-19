@@ -34,8 +34,8 @@ git diff --check
 ## パッケージを足すとき
 
 - claude・codex は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
-- サードパーティ tap は使わない。ほとんどの tap は JSON の定義を公開していないので、mise は Formula の Ruby 定義を Ruby 3 で評価する。この経路はビルド済みの bottle を使わず、Formula の install 処理を実行するので、ビルド用ツールが要ることもある。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/config.toml` に `github:owner/repo` で書く。
-- tap の Cask は、定義の評価に Ruby 3 が要り、macOS の Ruby 2.6 では `status` や `--dry-run` も失敗する。Orca は tap にしか Cask がないので、hook でリリースの DMG を入れている。
+- サードパーティ tap の Formula は使わない。ほとんどの tap は JSON の定義を公開していないので、mise は Formula の Ruby 定義を Ruby 3 で評価する。この経路はビルド済みの bottle を使わず、Formula の install 処理を実行するので、ビルド用ツールが要ることもある。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/config.toml` に `github:owner/repo` で書く。
+- tap の Cask は、定義の評価に Ruby 3 が要る。macOS の Ruby は 2.6 なので、`[bootstrap.hooks.pre-packages]` で mise の Ruby 3 を入れ、mise はそれを見つけて使う。hook は apply のときしか動かないため、新しい Mac で最初の bootstrap より前に実行した `status` と `--dry-run` は失敗する。mise の DSL が対応していない記述があると、Ruby があっても失敗する。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
 - keg-only の Formula は `/opt/homebrew/bin` にリンクされない。curl は macOS にあるため keg-only で、入れても `/usr/bin/curl` が使われていた。足す前に `https://formulae.brew.sh/api/formula/<name>.json` の `keg_only` を確かめる。
 - エージェントのスキルは、`npx skills add -g` で入れたままにせず、`mise.toml` の `skills` タスクに出所と名前を書く。タスクは `~/.agents/skills` にないものだけを入れる。

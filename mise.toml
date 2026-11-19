@@ -28,6 +28,7 @@ task.run_auto_install = false
 "brew-cask:obsidian" = "latest"
 "brew-cask:openlogi" = "latest"
 "brew-cask:rectangle" = "latest"
+"brew-cask:stablyai/orca/orca" = "latest"
 "brew-cask:t3-code" = "latest"
 "brew-cask:tailscale-app" = "latest"
 "brew-cask:thaw" = "latest"
@@ -64,8 +65,15 @@ task.run_auto_install = false
 "brew:wget" = "latest"
 "mas:539883307" = "latest" # LINE
 
+# Take over an app that is already installed instead of replacing it, which can revoke its Privacy & Security permissions.
+[bootstrap.brew]
+adopt = true
+
+# Casks from third-party taps are evaluated with Ruby 3, which macOS lacks; mise finds the one this installs.
+[bootstrap.hooks.pre-packages]
+run = "~/.local/bin/mise install ruby@3"
+
 # Agent CLIs use their official installers; claude and codex update themselves, t3 updates with `t3 update`.
-# Orca's cask lives in its own tap, which mise evaluates only with Ruby 3; install the release DMG and let the app update itself.
 # Starship uses the Tokyo Night preset; an existing config is left alone.
 # GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
 # Hooks run under `sh -o errexit`; pipefail stops a failed curl from passing silently.
@@ -75,14 +83,6 @@ set -o pipefail
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
 test -x ~/.local/bin/t3 || curl -fsSL https://t3.codes/install.sh | sh
-if [ ! -d /Applications/Orca.app ]; then
-  tmp="$(mktemp -d)"
-  curl -fsSL -o "$tmp/orca.dmg" https://github.com/stablyai/orca/releases/latest/download/orca-macos-arm64.dmg
-  hdiutil attach -nobrowse -readonly -mountpoint "$tmp/mnt" "$tmp/orca.dmg" >/dev/null
-  ditto "$tmp/mnt/Orca.app" /Applications/Orca.app
-  hdiutil detach "$tmp/mnt" >/dev/null
-  rm -rf "$tmp"
-fi
 test -e ~/.config/starship.toml || { mkdir -p ~/.config && /opt/homebrew/bin/starship preset tokyo-night -o ~/.config/starship.toml; }
 if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
   keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
@@ -134,7 +134,6 @@ fish = "activate"
 "~/.docker/cli-plugins/docker-compose" = { source = "/opt/homebrew/lib/docker/cli-plugins/docker-compose" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
-"~/.local/bin/orca" = { source = "/Applications/Orca.app/Contents/Resources/bin/orca" }
 "~/Library/LaunchAgents/com.github.abiosoft.colima.plist" = { source = "dotfiles/launchd/com.github.abiosoft.colima.plist", mode = "copy" }
 "~/.ssh/config/osx-setup" = { source = "dotfiles/ssh/config", comment = "#" }
 
