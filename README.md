@@ -81,7 +81,7 @@ Host github.com
 
 DockerはColimaのVMで動く。`colima`・`docker`・`docker-compose`・`docker-buildx`はFormulaで入る。
 
-Colimaはログイン時にLaunchAgentから起動する。VMにはCPUを6個、メモリを12GiB割り当てる。bootstrapはplistを置くだけなので、Colimaが起動するのは次のログインからになる。起動の記録は`~/.colima/launchd.log`に残る。
+Colimaは、`mise.toml`で宣言したLaunchAgentから、ログイン時に起動する。VMにはCPUを6個、メモリを12GiB割り当てる。bootstrapはLaunchAgentを読み込むので、その場でも起動する。起動の記録は`~/Library/Logs/colima.log`に残る。
 
 【未確認】新しいMacの初回起動では、VMのイメージのダウンロードに時間がかかる想定だ。
 
@@ -98,21 +98,20 @@ mise bootstrap packages upgrade --dry-run
 mise bootstrap packages upgrade
 mise run cleanup --dry-run
 mise run cleanup
-mise upgrade
 npx skills update -g
 sudo softwareupdate --install
 ```
 
-- `mise dot diff`で、dotfilesを適用すると消える変更がないかを先に確かめる。`direnv.fish`・`.gitignore_global`・ColimaのLaunchAgentはコピーで配るので、手元で足した行は`mise bootstrap`で上書きされる。残したい行は、リポジトリの`dotfiles/`に足してから適用する。
+- `mise dot diff`で、dotfilesを適用すると消える変更がないかを先に確かめる。`direnv.fish`・`.gitignore_global`はコピーで配るので、手元で足した行は`mise bootstrap`で上書きされる。残したい行は、リポジトリの`dotfiles/`に足してから適用する。
 - 手元の実ファイルをsymlinkに置き換える適用は拒否される。そのファイルを退避してから、`mise dot apply <target> --force`で置き換える。
 - `mise bootstrap`は、新しく宣言したパッケージを入れ、Fishプラグインを`fisher update`で更新する。取得に失敗したプラグインがあると、`fish_plugins`を元に戻して止まる。宣言したエージェントのスキルのうち、入っていないものを`npx skills add`で`~/.agents/skills`に入れる。App Storeのアプリを入れるときは、パスワードを求められる。
 - `mise bootstrap packages upgrade`は、入っているFormula・Cask・App Storeのアプリを最新にする。Formulaの古い版は`Cellar`に残るので、`mise run cleanup`で消す。`/opt/homebrew`のリンクがまだ向いている版は消さずに残す。
 - 宣言から外したFormulaは、`mise bootstrap packages prune`で消す。消したあとに残る空のディレクトリは、`mise run cleanup`で片付ける。
-- `mise upgrade`は、`dotfiles/mise/config.toml`のツールを更新する。nodeは最新のLTSを追う。
+- `dotfiles/mise/config.toml`のツールは、`tool_update.global_auto`により、使うときに1日1回確かめて更新される。すぐ上げたいときは`mise upgrade`を実行する。nodeは最新のLTSを追う。
 - `npx skills update -g`は、入っているスキルを最新にする。スキルを足すときは、`mise.toml`の`skills`タスクに出所と名前を書く。`~/.agents/.skill-lock.json`から復元するコマンドはないので、lockファイルは管理しない。
 - mise本体は`auto_update`で自動で更新される。すぐ上げたいときは`mise self-update`を実行する。
-- claude・codex・Orcaは、それぞれ自分で更新する。
-- T3 CodeのCLI（`t3`）は、`t3 update`で更新する。アプリは自分で更新する。
+- claude・codex・agyは、それぞれ自分で更新する。t3はmiseのツールとして更新される。
+- Orca・T3 Codeのアプリは、それぞれ自分で更新する。
 
 ## 構成
 
@@ -128,9 +127,11 @@ osx-setup/
     ├── gitconfig         # ~/.gitconfigの管理ブロック。最後に~/.gitconfig.localを読み込む
     ├── gitignore_global  # ~/.gitignore_globalにコピー
     ├── karabiner/        # ~/.config/karabinerにディレクトリごとsymlink
-    ├── launchd/          # ~/Library/LaunchAgentsにコピー。ログイン時にColimaを起動する
-    ├── mise/config.toml  # ~/.config/mise/config.tomlにsymlink。miseの自動更新、ランタイム、Homebrew本家にないCLI
-    └── ssh/config        # ~/.ssh/configの管理ブロック。1PasswordのSSH agentを使う
+    ├── mise/config.toml  # ~/.config/mise/config.tomlにsymlink。miseとツールの自動更新、ランタイム、Homebrew本家にないCLI
+    ├── ssh/
+    │   ├── config        # ~/.ssh/configの管理ブロック。1PasswordのSSH agentを使う
+    │   └── known_hosts   # ~/.ssh/known_hostsの管理ブロック。GitHubのホスト鍵
+    └── starship.toml     # ~/.config/starship.tomlにsymlink。Tokyo Nightのプリセット
 ```
 
 symlinkのリンク先はこのリポジトリにある。clone先を動かすとリンクが切れるので、動かさない。

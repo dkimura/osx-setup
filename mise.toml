@@ -73,23 +73,14 @@ adopt = true
 [bootstrap.hooks.pre-packages]
 run = "~/.local/bin/mise install ruby@3"
 
-# Agent CLIs use their official installers; claude and codex update themselves, t3 updates with `t3 update`.
-# Starship uses the Tokyo Night preset; an existing config is left alone.
-# GitHub's SSH host keys come from its API over HTTPS instead of trusting ssh-keyscan.
+# Agent CLIs that update themselves use their official installers and keep their own updates.
 # Hooks run under `sh -o errexit`; pipefail stops a failed curl from passing silently.
 [bootstrap.hooks.post-packages]
 run = '''
 set -o pipefail
 test -x ~/.local/bin/claude || curl -fsSL https://claude.ai/install.sh | bash
 test -x ~/.local/bin/codex || curl -fsSL https://chatgpt.com/codex/install.sh | sh
-test -x ~/.local/bin/t3 || curl -fsSL https://t3.codes/install.sh | sh
-test -e ~/.config/starship.toml || { mkdir -p ~/.config && /opt/homebrew/bin/starship preset tokyo-night -o ~/.config/starship.toml; }
-if ! ssh-keygen -F github.com -f ~/.ssh/known_hosts >/dev/null 2>&1; then
-  keys="$(curl -fsSL https://api.github.com/meta | /opt/homebrew/bin/jq -r '.ssh_keys[] | "github.com " + .')"
-  [ -n "$keys" ] || { echo "failed to fetch GitHub SSH host keys" >&2; exit 1; }
-  mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  printf '%s\n' "$keys" >> ~/.ssh/known_hosts
-fi
+test -x ~/.local/bin/agy || curl -fsSL https://antigravity.google/cli/install.sh | bash
 '''
 
 # mise writes the Dock preferences but does not restart the Dock to show them.
@@ -116,6 +107,15 @@ NSGlobalDomain = { AppleInterfaceStyleSwitchesAutomatically = true, InitialKeyRe
 "com.apple.universalaccess" = { reduceMotion = true }
 "com.knollsoft.Rectangle" = { allowAnyShortcut = true, alternateDefaultShortcuts = true, subsequentExecutionMode = 1 }
 
+# `colima start` boots the VM and exits, so the agent runs once at login instead of staying alive.
+[bootstrap.macos.launchd.agents.colima]
+program = "/opt/homebrew/bin/colima"
+args = ["start", "--cpus", "6", "--memory", "12"]
+run_at_load = true
+environment = { PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" }
+stdout_path = "~/Library/Logs/colima.log"
+stderr_path = "~/Library/Logs/colima.log"
+
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/fish"
 
@@ -130,12 +130,13 @@ fish = "activate"
 "~/.config/git/allowed_signers" = { source = "dotfiles/allowed_signers" }
 "~/.config/karabiner" = { source = "dotfiles/karabiner" }
 "~/.config/mise/config.toml" = { source = "dotfiles/mise/config.toml" }
+"~/.config/starship.toml" = { source = "dotfiles/starship.toml" }
 "~/.docker/cli-plugins/docker-buildx" = { source = "/opt/homebrew/lib/docker/cli-plugins/docker-buildx" }
 "~/.docker/cli-plugins/docker-compose" = { source = "/opt/homebrew/lib/docker/cli-plugins/docker-compose" }
 "~/.gitconfig/osx-setup" = { source = "dotfiles/gitconfig", comment = "#" }
 "~/.gitignore_global" = { source = "dotfiles/gitignore_global", mode = "copy" }
-"~/Library/LaunchAgents/com.github.abiosoft.colima.plist" = { source = "dotfiles/launchd/com.github.abiosoft.colima.plist", mode = "copy" }
 "~/.ssh/config/osx-setup" = { source = "dotfiles/ssh/config", comment = "#" }
+"~/.ssh/known_hosts/osx-setup" = { source = "dotfiles/ssh/known_hosts", comment = "#" }
 
 [tasks.bootstrap]
 description = "Install Fish plugins listed in fish_plugins"

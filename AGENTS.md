@@ -9,12 +9,12 @@ Apple Silicon Mac 1台分の設定を `mise bootstrap` で宣言するリポジ�
 - mise は 2026.9.12 以上が必要（`min_version`）。PATH 上に別の mise があり得るので、作業前に `command -v mise` と `mise --version` を確認する。
 - Homebrew 本体は使わない。`brew:` / `brew-cask:` は mise が `/opt/homebrew` へ直接入れる。`brew` コマンドや Homebrew のインストールを前提にした hook・スクリプト、`brew:mise` を足さない。
 - 公開リポジトリなので、秘密値・トークン・個人のローカル設定を入れない。`config.fish`・`.gitconfig`・`~/.ssh/config` は marker ブロックだけを管理し、ブロック外はマシンごとの領域として触らない。
-- `mise.toml` に `[tools]` は書かない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書き、Homebrew 本家にないものは `dotfiles/mise/config.toml` の `[tools]` に `github:` で書く。bun・go・node のようなランタイムも `dotfiles/mise/config.toml` に書く。
+- `mise.toml` に `[tools]` は書かない。リポジトリの `[tools]` はリポジトリ配下でしか有効にならず、マシン全体には適用されない。全体で使う CLI は `[bootstrap.packages]` に書き、Homebrew 本家にないものは `dotfiles/mise/config.toml` の `[tools]` に書く。mise の registry にあれば名前で、なければ `github:` で書く。bun・go・node のようなランタイムも `dotfiles/mise/config.toml` に書く。
 - `auto_update` のような global_only の設定は、`mise.toml` の `[settings]` に書いても無視される。`dotfiles/mise/config.toml` に書く。このファイルは `~/.config/mise/config.toml` に symlink するので、`mise use -g` の変更もそのままリポジトリの差分になる。
 
 ## 構成
 
-- `mise.toml`: パッケージ、macOS defaults、Dock、ログインシェル、dotfiles、bootstrap タスク、`doctor.checks`。
+- `mise.toml`: パッケージ、macOS defaults、Dock、LaunchAgent、ログインシェル、dotfiles、bootstrap タスク、`doctor.checks`。
 - `dotfiles/`: `[dotfiles]` の source。Karabiner はディレクトリごと、`fish_plugins` はファイルを symlink で管理する。GUI や `fisher install` の変更がそのままリポジトリの差分になる。Karabiner の `automatic_backups/`・`assets/` は `.gitignore` で除外している。
 
 ## 検証
@@ -33,8 +33,8 @@ git diff --check
 
 ## パッケージを足すとき
 
-- claude・codex は Homebrew で入れない。`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新は各ツールに任せる。
-- サードパーティ tap の Formula は使わない。ほとんどの tap は JSON の定義を公開していないので、mise は Formula の Ruby 定義を Ruby 3 で評価する。この経路はビルド済みの bottle を使わず、Formula の install 処理を実行するので、ビルド用ツールが要ることもある。新しい Mac では mo・ax の導入が失敗した。GitHub Releases にビルド済みバイナリがあれば、`dotfiles/mise/config.toml` に `github:owner/repo` で書く。
+- 自分で更新するツール（claude・codex・agy）は、`[bootstrap.hooks.post-packages]` で、`~/.local/bin` になければ公式インストーラを実行し、更新はツールに任せる。mise で入れると更新が `minimum_release_age` の分だけ遅れ、ツールの自動更新も切る必要がある。自分で更新しないツール（t3）は、`dotfiles/mise/config.toml` の `[tools]` に書き、`tool_update.global_auto` で mise に更新させる。
+- サードパーティ tap の Formula は、`[bootstrap.packages]` に `brew:owner/tap/name` で書いてよい。Cask と同じく、hook で入れた Ruby 3 で定義を評価する。mise は bottle を使わずに Formula の install 処理を実行するので、Homebrew と同じには動かない。ダウンロードしたバイナリをそのまま置く Formula（ax）は、実行権のないファイルが入る。足す前に `mise bootstrap packages apply <package>` で入れて、コマンドが動くか確かめる。GitHub Releases のバイナリを置くだけの CLI は、Ruby が要らない `github:` で `dotfiles/mise/config.toml` に書く。
 - tap の Cask は、定義の評価に Ruby 3 が要る。macOS の Ruby は 2.6 なので、`[bootstrap.hooks.pre-packages]` で mise の Ruby 3 を入れ、mise はそれを見つけて使う。hook は apply のときしか動かないため、新しい Mac で最初の bootstrap より前に実行した `status` と `--dry-run` は失敗する。mise の DSL が対応していない記述があると、Ruby があっても失敗する。
 - `[bootstrap.packages]` は種類ごとにアルファベット順を保つ。
 - keg-only の Formula は `/opt/homebrew/bin` にリンクされない。curl は macOS にあるため keg-only で、入れても `/usr/bin/curl` が使われていた。足す前に `https://formulae.brew.sh/api/formula/<name>.json` の `keg_only` を確かめる。

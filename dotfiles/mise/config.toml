@@ -1,9 +1,13 @@
+# gh keeps its token in the keychain, where github.gh_cli_tokens cannot read it; without one, GitHub allows 60 requests an hour.
 [settings]
 auto_update = true
+github.credential_command = "/opt/homebrew/bin/gh auth token"
+tool_update.global_auto = true
 
 [tools]
 bun = "latest"
 go = "latest"
 node = "lts"
+"github:pingdotgg/t3code" = "latest"
 "github:raine/git-surgeon" = "latest"
 "github:yusukebe/ax" = "latest"
